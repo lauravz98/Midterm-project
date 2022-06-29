@@ -4,6 +4,8 @@ import com.ironhack.midtermproject.controller.dto.AccountBalanceDTO;
 import com.ironhack.midtermproject.controller.interfaces.AdminController;
 import com.ironhack.midtermproject.models.Account;
 import com.ironhack.midtermproject.models.Checking;
+import com.ironhack.midtermproject.models.CreditCard;
+import com.ironhack.midtermproject.models.Saving;
 import com.ironhack.midtermproject.repository.AccountRepository;
 import com.ironhack.midtermproject.service.interfaces.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +34,21 @@ public class AdminControllerImpl implements AdminController {
     public Account findAccountById(@PathVariable Long accountId) {
         return adminService.findAccountById(accountId);
     }
-    @PostMapping("/accounts/checking") // Created
+    @PostMapping("/accounts/checking") // Created checking account
     @ResponseStatus(HttpStatus.CREATED)
     public Account store(@RequestBody @Valid Checking checkingAccount){
         return adminService.createCheckingAccount(checkingAccount);
     }
-
+    @PostMapping("/accounts/saving") // Created saving
+    @ResponseStatus(HttpStatus.CREATED)
+    public Account store(@RequestBody @Valid Saving savingAccount){
+        return adminService.createSavingAccount(savingAccount);
+    }
+    @PostMapping("/accounts/creditCard") // Created saving
+    @ResponseStatus(HttpStatus.CREATED)
+    public Account store(CreditCard creditCard) {
+        return adminService.createCreditCard(creditCard);
+    }
 
     @PatchMapping("/accounts/{accountId}/balance")
     @ResponseStatus(HttpStatus.NO_CONTENT)

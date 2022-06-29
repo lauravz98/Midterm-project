@@ -50,8 +50,8 @@ public class Saving extends Account{
         setBalance(balance);
     }
 
-    public Saving(AccountHolder primaryOwner, String secretKey, Money balance, Money minimumBalance, BigDecimal interestRate) {
-        super(primaryOwner, secretKey);
+    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money balance, Money minimumBalance, BigDecimal interestRate) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey, balance);
         setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(minimumBalance);
         setInterestRate(interestRate);

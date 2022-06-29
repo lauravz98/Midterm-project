@@ -1,9 +1,7 @@
 package com.ironhack.midtermproject.service.impl;
 
 import com.ironhack.midtermproject.classes.Money;
-import com.ironhack.midtermproject.models.Account;
-import com.ironhack.midtermproject.models.Checking;
-import com.ironhack.midtermproject.models.StudentChecking;
+import com.ironhack.midtermproject.models.*;
 import com.ironhack.midtermproject.repository.AccountRepository;
 import com.ironhack.midtermproject.repository.AdminRepository;
 import com.ironhack.midtermproject.service.interfaces.AdminService;
@@ -49,6 +47,19 @@ public class AdminServiceImpl implements AdminService {
         return accountRepository.save(account);
     }
 
+    public Saving createSavingAccount(Saving savingAccount) {
+        Saving account = new Saving(savingAccount.getPrimaryOwner(), savingAccount.getSecondaryOwner(),
+                savingAccount.getCreationDate(), savingAccount.getSecretKey(), savingAccount.getBalance(),
+                savingAccount.getMinimumBalance(), savingAccount.getInterestRate());
+        return accountRepository.save(account);
+    }
+    public Account createCreditCard(CreditCard creditCard) {
+        CreditCard account = new CreditCard(creditCard.getPrimaryOwner(), creditCard.getSecondaryOwner(),
+                creditCard.getCreationDate(), creditCard.getSecretKey(), creditCard.getBalance(),
+                creditCard.getCreditLimit(), creditCard.getInterestRate());
+        return accountRepository.save(account);
+    }
+
 
     public void updateBalance(Long accountId, Money balance) {
         Account account = accountRepository.findById(accountId)
@@ -65,6 +76,8 @@ public class AdminServiceImpl implements AdminService {
         accountRepository.delete(account);
 
     }
+
+
 
 
 }

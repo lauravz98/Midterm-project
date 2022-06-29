@@ -50,7 +50,7 @@ public class CreditCard extends Account{
     }
 
     public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate,
-                      String secretKey, Money creditLimit, BigDecimal interestRate, Money balance) {
+                      String secretKey, Money balance, Money creditLimit, BigDecimal interestRate) {
         super(primaryOwner, secondaryOwner, creationDate, secretKey, balance);
         setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(creditLimit);
