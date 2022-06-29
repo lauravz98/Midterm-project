@@ -41,90 +41,106 @@ public class CreditCard extends Account{
         super();
     }
 
-    public CreditCard(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey) {
-        super(primaryOwner, typeAccount, secretKey);
+    public CreditCard(AccountHolder primaryOwner, String secretKey) {
+        super(primaryOwner, secretKey);
+        setCreditLimit(MIN_CREDIT_LIMIT);
+        setInterestRate(MAX_INTEREST_RATE);
+        setTypeAccount(TypeAccountEnum.CREDIT);
+    }
+
+    public CreditCard(AccountHolder primaryOwner, Date creationDate, String secretKey) {
+        super(primaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(MIN_CREDIT_LIMIT);
         setInterestRate(MAX_INTEREST_RATE);
     }
 
-    public CreditCard(AccountHolder primaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey) {
-        super(primaryOwner, typeAccount, creationDate, secretKey);
+    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+        super(primaryOwner, secondaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(MIN_CREDIT_LIMIT);
         setInterestRate(MAX_INTEREST_RATE);
     }
 
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, String secretKey) {
-        super(primaryOwner, secondaryOwner, typeAccount, secretKey);
+    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner,  Date creationDate, String secretKey) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(MIN_CREDIT_LIMIT);
         setInterestRate(MAX_INTEREST_RATE);
     }
 
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey) {
-        super(primaryOwner, secondaryOwner, typeAccount, creationDate, secretKey);
-        setCreditLimit(MIN_CREDIT_LIMIT);
-        setInterestRate(MAX_INTEREST_RATE);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey, Money creditLimit) {
-        super(primaryOwner, typeAccount, secretKey);
+    public CreditCard(AccountHolder primaryOwner, String secretKey, Money creditLimit) {
+        super(primaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(creditLimit);
     }
 
-    public CreditCard(AccountHolder primaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, Money creditLimit) {
-        super(primaryOwner, typeAccount, creationDate, secretKey);
+    public CreditCard(AccountHolder primaryOwner, Date creationDate, String secretKey, Money creditLimit) {
+        super(primaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(creditLimit);
     }
 
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, String secretKey, Money creditLimit) {
-        super(primaryOwner, secondaryOwner, typeAccount, secretKey);
+    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, Money creditLimit) {
+        super(primaryOwner, secondaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(creditLimit);
     }
 
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, Money creditLimit) {
-        super(primaryOwner, secondaryOwner, typeAccount, creationDate, secretKey);
+    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money creditLimit) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(creditLimit);
     }
 
-    public CreditCard(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, typeAccount, secretKey);
+    public CreditCard(AccountHolder primaryOwner, String secretKey, BigDecimal interestRate) {
+        super(primaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setInterestRate(interestRate);
     }
 
-    public CreditCard(AccountHolder primaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, typeAccount, creationDate, secretKey);
+    public CreditCard(AccountHolder primaryOwner,  Date creationDate, String secretKey, BigDecimal interestRate) {
+        super(primaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setInterestRate(interestRate);
     }
 
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, typeAccount, secretKey);
+    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, BigDecimal interestRate) {
+        super(primaryOwner, secondaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setInterestRate(interestRate);
     }
 
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, typeAccount, creationDate, secretKey);
+    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner,  Date creationDate, String secretKey, BigDecimal interestRate) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setInterestRate(interestRate);
     }
 
-    public CreditCard(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey, Money creditLimit, BigDecimal interestRate) {
-        super(primaryOwner, typeAccount, secretKey);
-        setCreditLimit(creditLimit);
-        setInterestRate(interestRate);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, Money creditLimit, BigDecimal interestRate) {
-        super(primaryOwner, typeAccount, creationDate, secretKey);
+    public CreditCard(AccountHolder primaryOwner, String secretKey, Money creditLimit, BigDecimal interestRate) {
+        super(primaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(creditLimit);
         setInterestRate(interestRate);
     }
 
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, String secretKey, Money creditLimit, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, typeAccount, secretKey);
+    public CreditCard(AccountHolder primaryOwner, Date creationDate, String secretKey, Money creditLimit, BigDecimal interestRate) {
+        super(primaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(creditLimit);
         setInterestRate(interestRate);
     }
 
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, Money creditLimit, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, typeAccount, creationDate, secretKey);
+    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, Money creditLimit, BigDecimal interestRate) {
+        super(primaryOwner, secondaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
+        setCreditLimit(creditLimit);
+        setInterestRate(interestRate);
+    }
+
+    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money creditLimit, BigDecimal interestRate) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(creditLimit);
         setInterestRate(interestRate);
     }

@@ -14,19 +14,23 @@ public class StudentChecking extends Account{
         super();
     }
 
-    public StudentChecking(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey) {
-        super(primaryOwner, typeAccount, secretKey);
+    public StudentChecking(AccountHolder primaryOwner, String secretKey) {
+        super(primaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.STUDENT_SAVINGS);
     }
 
-    public StudentChecking(AccountHolder primaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey) {
-        super(primaryOwner, typeAccount, creationDate, secretKey);
+    public StudentChecking(AccountHolder primaryOwner, Date creationDate, String secretKey) {
+        super(primaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.STUDENT_SAVINGS);
     }
 
-    public StudentChecking(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, String secretKey) {
-        super(primaryOwner, secondaryOwner, typeAccount, secretKey);
+    public StudentChecking(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+        super(primaryOwner, secondaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.STUDENT_SAVINGS);
     }
 
-    public StudentChecking(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey) {
-        super(primaryOwner, secondaryOwner, typeAccount, creationDate, secretKey);
+    public StudentChecking(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.STUDENT_SAVINGS);
     }
 }

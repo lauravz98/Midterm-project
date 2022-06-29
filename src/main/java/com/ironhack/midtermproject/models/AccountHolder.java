@@ -1,6 +1,7 @@
 package com.ironhack.midtermproject.models;
 
 import com.ironhack.midtermproject.classes.Address;
+import com.ironhack.midtermproject.enums.UserRole;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -33,6 +34,7 @@ public class AccountHolder extends User{
         this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.mailingAddress = null;
+        super.setUserRole(UserRole.ACCOUNT_HOLDER);
     }
 
     public AccountHolder(String name, String password, Date dateOfBirth, Address address, int mailingAddress) {
@@ -40,6 +42,30 @@ public class AccountHolder extends User{
         this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.mailingAddress = mailingAddress;
+        super.setUserRole(UserRole.ACCOUNT_HOLDER);
     }
 
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Integer getMailingAddress() {
+        return mailingAddress;
+    }
+
+    public void setMailingAddress(Integer mailingAddress) {
+        this.mailingAddress = mailingAddress;
+    }
 }

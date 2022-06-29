@@ -92,6 +92,38 @@ public abstract class Account {
         this.creationDate = creationDate;
         this.secretKey = secretKey;
     }
+    protected Account(AccountHolder primaryOwner, String secretKey) {
+        this.primaryOwner = primaryOwner;
+        this.secondaryOwner = null;
+        this.statusAccount = StatusAccountEnum.ACTIVE;
+        this.creationDate = getDateNow();
+        this.secretKey = secretKey;
+    }
+
+    protected Account(AccountHolder primaryOwner, Date creationDate, String secretKey) {
+        this.primaryOwner = primaryOwner;
+        this.secondaryOwner = null;
+        this.statusAccount = StatusAccountEnum.ACTIVE;
+        this.creationDate = creationDate;
+        this.secretKey = secretKey;
+    }
+
+    protected Account(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+        this.primaryOwner = primaryOwner;
+        this.secondaryOwner = secondaryOwner;
+        this.statusAccount = StatusAccountEnum.ACTIVE;
+        this.creationDate = getDateNow();
+        this.secretKey = secretKey;
+    }
+
+    protected Account(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey) {
+        this.primaryOwner = primaryOwner;
+        this.secondaryOwner = secondaryOwner;
+        this.statusAccount = StatusAccountEnum.ACTIVE;
+        this.creationDate = creationDate;
+        this.secretKey = secretKey;
+    }
+
     protected Date getDateNow(){
         now = LocalDateTime.now();
         Date today = Date.from(now.toInstant((ZoneOffset) ZoneId.systemDefault()));

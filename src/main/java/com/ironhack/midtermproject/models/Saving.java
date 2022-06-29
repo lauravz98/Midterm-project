@@ -42,98 +42,114 @@ public class Saving extends Account{
         super();
     }
 
-    public Saving(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey) {
-        super(primaryOwner, typeAccount, secretKey);
+    public Saving(AccountHolder primaryOwner, String secretKey) {
+        super(primaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(MIN_MINIMUM_BALANCE);
         setInterestRate(new BigDecimal(0.0025));
     }
 
-    public Saving(AccountHolder primaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey) {
-        super(primaryOwner, typeAccount, creationDate, secretKey);
+    public Saving(AccountHolder primaryOwner, Date creationDate, String secretKey) {
+        super(primaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(MIN_MINIMUM_BALANCE);
         setInterestRate(new BigDecimal(0.0025));
     }
 
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, String secretKey) {
-        super(primaryOwner, secondaryOwner, typeAccount, secretKey);
+    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+        super(primaryOwner, secondaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(MIN_MINIMUM_BALANCE);
         setInterestRate(new BigDecimal(0.0025));
     }
 
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey) {
-        super(primaryOwner, secondaryOwner, typeAccount, creationDate, secretKey);
+    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(MIN_MINIMUM_BALANCE);
         setInterestRate(new BigDecimal(0.0025));
     }
 
-    public Saving(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey, Money minimumBalance) {
-        super(primaryOwner, typeAccount, secretKey);
+    public Saving(AccountHolder primaryOwner, String secretKey, Money minimumBalance) {
+        super(primaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(minimumBalance);
         setInterestRate(new BigDecimal(0.0025));
     }
 
-    public Saving(AccountHolder primaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, Money minimumBalance) {
-        super(primaryOwner, typeAccount, creationDate, secretKey);
+    public Saving(AccountHolder primaryOwner, Date creationDate, String secretKey, Money minimumBalance) {
+        super(primaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(minimumBalance);
         setInterestRate(new BigDecimal(0.0025));
     }
 
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, String secretKey, Money minimumBalance) {
-        super(primaryOwner, secondaryOwner, typeAccount, secretKey);
+    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, Money minimumBalance) {
+        super(primaryOwner, secondaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(minimumBalance);
         setInterestRate(new BigDecimal(0.0025));
     }
 
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, Money minimumBalance) {
-        super(primaryOwner, secondaryOwner, typeAccount, creationDate, secretKey);
+    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money minimumBalance) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(minimumBalance);
         setInterestRate(new BigDecimal(0.0025));
     }
 
-    public Saving(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, typeAccount, secretKey);
+    public Saving(AccountHolder primaryOwner, String secretKey, BigDecimal interestRate) {
+        super(primaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(MIN_MINIMUM_BALANCE);
         setInterestRate(interestRate);
     }
 
-    public Saving(AccountHolder primaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, typeAccount, creationDate, secretKey);
+    public Saving(AccountHolder primaryOwner, Date creationDate, String secretKey, BigDecimal interestRate) {
+        super(primaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(MIN_MINIMUM_BALANCE);
         setInterestRate(interestRate);
     }
 
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, typeAccount, secretKey);
+    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, BigDecimal interestRate) {
+        super(primaryOwner, secondaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(MIN_MINIMUM_BALANCE);
         setInterestRate(interestRate);
     }
 
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, typeAccount, creationDate, secretKey);
+    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner,  Date creationDate, String secretKey, BigDecimal interestRate) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(MIN_MINIMUM_BALANCE);
         setInterestRate(interestRate);
     }
 
-    public Saving(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey, Money minimumBalance, BigDecimal interestRate) {
-        super(primaryOwner, typeAccount, secretKey);
+    public Saving(AccountHolder primaryOwner, String secretKey, Money minimumBalance, BigDecimal interestRate) {
+        super(primaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(minimumBalance);
         setInterestRate(interestRate);
     }
 
-    public Saving(AccountHolder primaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, Money minimumBalance, BigDecimal interestRate) {
-        super(primaryOwner, typeAccount, creationDate, secretKey);
+    public Saving(AccountHolder primaryOwner, Date creationDate, String secretKey, Money minimumBalance, BigDecimal interestRate) {
+        super(primaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(minimumBalance);
         setInterestRate(interestRate);
     }
 
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, String secretKey, Money minimumBalance, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, typeAccount, secretKey);
+    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, Money minimumBalance, BigDecimal interestRate) {
+        super(primaryOwner, secondaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(minimumBalance);
         setInterestRate(interestRate);
     }
 
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey, Money minimumBalance, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, typeAccount, creationDate, secretKey);
+    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money minimumBalance, BigDecimal interestRate) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(minimumBalance);
         setInterestRate(interestRate);
     }

@@ -28,20 +28,24 @@ public class Checking extends Account{
         super();
     }
 
-    public Checking(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey) {
-        super(primaryOwner, typeAccount, secretKey);
+    public Checking(AccountHolder primaryOwner, String secretKey) {
+        super(primaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.CHECKING);
     }
 
-    public Checking(AccountHolder primaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey) {
-        super(primaryOwner, typeAccount, creationDate, secretKey);
+    public Checking(AccountHolder primaryOwner, Date creationDate, String secretKey) {
+        super(primaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.CHECKING);
     }
 
-    public Checking(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, String secretKey) {
-        super(primaryOwner, secondaryOwner, typeAccount, secretKey);
+    public Checking(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+        super(primaryOwner, secondaryOwner, secretKey);
+        setTypeAccount(TypeAccountEnum.CHECKING);
     }
 
-    public Checking(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey) {
-        super(primaryOwner, secondaryOwner, typeAccount, creationDate, secretKey);
+    public Checking(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey);
+        setTypeAccount(TypeAccountEnum.CHECKING);
     }
 
     public Money getMINIMUM_BALANCE() {
