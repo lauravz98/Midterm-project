@@ -3,16 +3,15 @@ package com.ironhack.midtermproject.models;
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.enums.StatusAccountEnum;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Optional;
-import java.sql.Timestamp;
+
+import static com.ironhack.midtermproject.utils.utils.getDateNow;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -20,7 +19,7 @@ public abstract class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long accountId;
+    private Long accountId;
     private String secretKey;
 
     @Embedded
@@ -53,11 +52,9 @@ public abstract class Account {
     @Enumerated(EnumType.STRING)
     private TypeAccountEnum typeAccount;
 
-    private LocalDateTime now;
-
     public Account() {
     }
-
+/*
     public Account(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey) {
         this.primaryOwner = primaryOwner;
         this.typeAccount = typeAccount;
@@ -92,7 +89,7 @@ public abstract class Account {
         this.statusAccount = StatusAccountEnum.ACTIVE;
         this.creationDate = creationDate;
         this.secretKey = secretKey;
-    }
+    }*/
     protected Account(AccountHolder primaryOwner, String secretKey) {
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = null;
@@ -101,37 +98,17 @@ public abstract class Account {
         this.secretKey = secretKey;
     }
 
-    protected Account(AccountHolder primaryOwner, Date creationDate, String secretKey) {
-        this.primaryOwner = primaryOwner;
-        this.secondaryOwner = null;
-        this.statusAccount = StatusAccountEnum.ACTIVE;
-        this.creationDate = creationDate;
-        this.secretKey = secretKey;
-    }
-
-    protected Account(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+    protected Account(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money balance) {
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
         this.statusAccount = StatusAccountEnum.ACTIVE;
-        this.creationDate = getDateNow();
+        setCreationDate(creationDate);
         this.secretKey = secretKey;
+        setBalance(balance);
     }
 
-    protected Account(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey) {
-        this.primaryOwner = primaryOwner;
-        this.secondaryOwner = secondaryOwner;
-        this.statusAccount = StatusAccountEnum.ACTIVE;
-        this.creationDate = creationDate;
-        this.secretKey = secretKey;
-    }
 
-    protected Date getDateNow(){
-        now = LocalDateTime.now();
-        Date today = Date.from(now.toInstant((ZoneOffset) ZoneId.systemDefault()));
-        return today;
-    }
-
-    public long getAccountId() {
+    public Long getAccountId() {
         return accountId;
     }
 
@@ -163,7 +140,7 @@ public abstract class Account {
         return typeAccount;
     }
 
-    public void setAccountId(long accountId) {
+    public void setAccountId(Long accountId) {
         this.accountId = accountId;
     }
 
@@ -172,6 +149,10 @@ public abstract class Account {
     }
 
     public void setBalance(Money balance) {
+        if(balance.compareTo(new Money(new BigDecimal(0))) < 0){
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "Balance is lower minimum allow: 0 USD");
+        }
         this.balance = balance;
     }
 
@@ -188,7 +169,15 @@ public abstract class Account {
     }
 
     public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+        if(creationDate == null){
+            this.creationDate = getDateNow();
+        } else {
+            this.creationDate = creationDate;
+        }
+    }
+
+    public String getSecretKey() {
+        return secretKey;
     }
 
     public void setTypeAccount(TypeAccountEnum typeAccount) {

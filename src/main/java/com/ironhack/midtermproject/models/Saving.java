@@ -42,116 +42,20 @@ public class Saving extends Account{
         super();
     }
 
-    public Saving(AccountHolder primaryOwner, String secretKey) {
+    public Saving(AccountHolder primaryOwner, String secretKey, Money balance) {
         super(primaryOwner, secretKey);
         setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(MIN_MINIMUM_BALANCE);
         setInterestRate(new BigDecimal(0.0025));
+        setBalance(balance);
     }
 
-    public Saving(AccountHolder primaryOwner, Date creationDate, String secretKey) {
-        super(primaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(MIN_MINIMUM_BALANCE);
-        setInterestRate(new BigDecimal(0.0025));
-    }
-
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
-        super(primaryOwner, secondaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(MIN_MINIMUM_BALANCE);
-        setInterestRate(new BigDecimal(0.0025));
-    }
-
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey) {
-        super(primaryOwner, secondaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(MIN_MINIMUM_BALANCE);
-        setInterestRate(new BigDecimal(0.0025));
-    }
-
-    public Saving(AccountHolder primaryOwner, String secretKey, Money minimumBalance) {
-        super(primaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(minimumBalance);
-        setInterestRate(new BigDecimal(0.0025));
-    }
-
-    public Saving(AccountHolder primaryOwner, Date creationDate, String secretKey, Money minimumBalance) {
-        super(primaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(minimumBalance);
-        setInterestRate(new BigDecimal(0.0025));
-    }
-
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, Money minimumBalance) {
-        super(primaryOwner, secondaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(minimumBalance);
-        setInterestRate(new BigDecimal(0.0025));
-    }
-
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money minimumBalance) {
-        super(primaryOwner, secondaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(minimumBalance);
-        setInterestRate(new BigDecimal(0.0025));
-    }
-
-    public Saving(AccountHolder primaryOwner, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(MIN_MINIMUM_BALANCE);
-        setInterestRate(interestRate);
-    }
-
-    public Saving(AccountHolder primaryOwner, Date creationDate, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(MIN_MINIMUM_BALANCE);
-        setInterestRate(interestRate);
-    }
-
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(MIN_MINIMUM_BALANCE);
-        setInterestRate(interestRate);
-    }
-
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner,  Date creationDate, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(MIN_MINIMUM_BALANCE);
-        setInterestRate(interestRate);
-    }
-
-    public Saving(AccountHolder primaryOwner, String secretKey, Money minimumBalance, BigDecimal interestRate) {
+    public Saving(AccountHolder primaryOwner, String secretKey, Money balance, Money minimumBalance, BigDecimal interestRate) {
         super(primaryOwner, secretKey);
         setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(minimumBalance);
         setInterestRate(interestRate);
-    }
-
-    public Saving(AccountHolder primaryOwner, Date creationDate, String secretKey, Money minimumBalance, BigDecimal interestRate) {
-        super(primaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(minimumBalance);
-        setInterestRate(interestRate);
-    }
-
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, Money minimumBalance, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(minimumBalance);
-        setInterestRate(interestRate);
-    }
-
-    public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money minimumBalance, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
-        setMinimumBalance(minimumBalance);
-        setInterestRate(interestRate);
+        setBalance(balance);
     }
 
     public Money getMinimumBalance() {
@@ -159,15 +63,20 @@ public class Saving extends Account{
     }
 
     public void setMinimumBalance(Money minimumBalance) {
-        if(minimumBalance.compareTo(MIN_MINIMUM_BALANCE) <= 0){
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
-                    , "The minimum balance is lower than the established lower limit" + MIN_MINIMUM_BALANCE);
-        } else if(minimumBalance.compareTo(MAX_MINIMUM_BALANCE) <= 0 ){
-            this.minimumBalance = minimumBalance;
-        } else{
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
-                    , "Minimum balance exceeds maximum limit" + MAX_MINIMUM_BALANCE);
+        if(minimumBalance == null){
+            this.minimumBalance = MIN_MINIMUM_BALANCE;
+        } else {
+            if(minimumBalance.compareTo(MIN_MINIMUM_BALANCE) <= 0){
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
+                        , "The minimum balance is lower than the established lower limit" + MIN_MINIMUM_BALANCE);
+            } else if(minimumBalance.compareTo(MAX_MINIMUM_BALANCE) <= 0 ){
+                this.minimumBalance = minimumBalance;
+            } else{
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
+                        , "Minimum balance exceeds maximum limit" + MAX_MINIMUM_BALANCE);
+            }
         }
+
     }
 
     public BigDecimal getInterestRate() {
@@ -175,15 +84,30 @@ public class Saving extends Account{
     }
 
     public void setInterestRate(BigDecimal interestRate) {
-        if(interestRate.compareTo(MIN_INTEREST_RATE) <= 0){
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
-                    , "Interest rate invalid. Interest rate is lower than the established lower limit" + MIN_INTEREST_RATE);
-        } else if(interestRate.compareTo(MAX_INTEREST_RATE) <= 0 ){
-            this.interestRate = interestRate;
-        } else{
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
-                    , "Interest rate invalid. Interest rate exceeds maximum limit" + MAX_INTEREST_RATE);
+
+        if(interestRate == null){
+            this.interestRate = new BigDecimal(0.0025);
+        } else {
+            if(interestRate.compareTo(MIN_INTEREST_RATE) <= 0){
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
+                        , "Interest rate invalid. Interest rate is lower than the established lower limit" + MIN_INTEREST_RATE);
+            } else if(interestRate.compareTo(MAX_INTEREST_RATE) <= 0 ){
+                this.interestRate = interestRate;
+            } else{
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
+                        , "Interest rate invalid. Interest rate exceeds maximum limit" + MAX_INTEREST_RATE);
+            }
         }
+
+    }
+
+    @Override
+    public void setBalance(Money balance) {
+        if(balance.compareTo(minimumBalance) < 0){
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "Balance is lower minimum allow: " + minimumBalance);
+        }
+        super.setBalance(balance);
     }
 
     public Money getMIN_MINIMUM_BALANCE() {

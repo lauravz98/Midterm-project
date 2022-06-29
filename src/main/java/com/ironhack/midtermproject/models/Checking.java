@@ -2,6 +2,8 @@ package com.ironhack.midtermproject.models;
 
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -28,25 +30,17 @@ public class Checking extends Account{
         super();
     }
 
-    public Checking(AccountHolder primaryOwner, String secretKey) {
+    public Checking(AccountHolder primaryOwner, String secretKey, Money balance) {
         super(primaryOwner, secretKey);
         setTypeAccount(TypeAccountEnum.CHECKING);
+        setBalance(balance);
     }
 
-    public Checking(AccountHolder primaryOwner, Date creationDate, String secretKey) {
-        super(primaryOwner, creationDate, secretKey);
+    public Checking(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money balance) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey, balance);
         setTypeAccount(TypeAccountEnum.CHECKING);
     }
 
-    public Checking(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
-        super(primaryOwner, secondaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.CHECKING);
-    }
-
-    public Checking(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey) {
-        super(primaryOwner, secondaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.CHECKING);
-    }
 
     public Money getMINIMUM_BALANCE() {
         return MINIMUM_BALANCE;
@@ -54,5 +48,14 @@ public class Checking extends Account{
 
     public Money getMONTHLY_MAINTENANCE_FEE() {
         return MONTHLY_MAINTENANCE_FEE;
+    }
+
+    @Override
+    public void setBalance(Money balance) {
+        if(balance.compareTo(MINIMUM_BALANCE) < 0){
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "Balance is lower minimum allow: " + MINIMUM_BALANCE);
+        }
+        super.setBalance(balance);
     }
 }

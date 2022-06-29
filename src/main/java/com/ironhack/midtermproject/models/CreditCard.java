@@ -41,105 +41,17 @@ public class CreditCard extends Account{
         super();
     }
 
-    public CreditCard(AccountHolder primaryOwner, String secretKey) {
+    public CreditCard(AccountHolder primaryOwner, String secretKey, Money balance) {
         super(primaryOwner, secretKey);
         setCreditLimit(MIN_CREDIT_LIMIT);
         setInterestRate(MAX_INTEREST_RATE);
         setTypeAccount(TypeAccountEnum.CREDIT);
+        setBalance(balance);
     }
 
-    public CreditCard(AccountHolder primaryOwner, Date creationDate, String secretKey) {
-        super(primaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setCreditLimit(MIN_CREDIT_LIMIT);
-        setInterestRate(MAX_INTEREST_RATE);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
-        super(primaryOwner, secondaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setCreditLimit(MIN_CREDIT_LIMIT);
-        setInterestRate(MAX_INTEREST_RATE);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner,  Date creationDate, String secretKey) {
-        super(primaryOwner, secondaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setCreditLimit(MIN_CREDIT_LIMIT);
-        setInterestRate(MAX_INTEREST_RATE);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, String secretKey, Money creditLimit) {
-        super(primaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setCreditLimit(creditLimit);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, Date creationDate, String secretKey, Money creditLimit) {
-        super(primaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setCreditLimit(creditLimit);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, Money creditLimit) {
-        super(primaryOwner, secondaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setCreditLimit(creditLimit);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money creditLimit) {
-        super(primaryOwner, secondaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setCreditLimit(creditLimit);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setInterestRate(interestRate);
-    }
-
-    public CreditCard(AccountHolder primaryOwner,  Date creationDate, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setInterestRate(interestRate);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setInterestRate(interestRate);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner,  Date creationDate, String secretKey, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setInterestRate(interestRate);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, String secretKey, Money creditLimit, BigDecimal interestRate) {
-        super(primaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setCreditLimit(creditLimit);
-        setInterestRate(interestRate);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, Date creationDate, String secretKey, Money creditLimit, BigDecimal interestRate) {
-        super(primaryOwner, creationDate, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setCreditLimit(creditLimit);
-        setInterestRate(interestRate);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, Money creditLimit, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, secretKey);
-        setTypeAccount(TypeAccountEnum.CREDIT);
-        setCreditLimit(creditLimit);
-        setInterestRate(interestRate);
-    }
-
-    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money creditLimit, BigDecimal interestRate) {
-        super(primaryOwner, secondaryOwner, creationDate, secretKey);
+    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate,
+                      String secretKey, Money creditLimit, BigDecimal interestRate, Money balance) {
+        super(primaryOwner, secondaryOwner, creationDate, secretKey, balance);
         setTypeAccount(TypeAccountEnum.CREDIT);
         setCreditLimit(creditLimit);
         setInterestRate(interestRate);
@@ -150,14 +62,18 @@ public class CreditCard extends Account{
     }
 
     public void setCreditLimit(Money creditLimit) {
-        if(creditLimit.compareTo(MIN_CREDIT_LIMIT) <= 0){
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
-                    , "The credit limit is lower than the established lower limit" + MIN_CREDIT_LIMIT);
-        } else if(creditLimit.compareTo(MAX_CREDIT_LIMIT) <= 0 ){
-            this.creditLimit = creditLimit;
-        } else{
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
-                    , "The credit limit exceeds maximum limit" + MAX_CREDIT_LIMIT);
+        if(creditLimit == null){
+            this.creditLimit = MIN_CREDIT_LIMIT;
+        }else {
+            if(creditLimit.compareTo(MIN_CREDIT_LIMIT) <= 0){
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
+                        , "The credit limit is lower than the established lower limit" + MIN_CREDIT_LIMIT);
+            } else if(creditLimit.compareTo(MAX_CREDIT_LIMIT) <= 0 ){
+                this.creditLimit = creditLimit;
+            } else{
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
+                        , "The credit limit exceeds maximum limit" + MAX_CREDIT_LIMIT);
+            }
         }
     }
 
@@ -166,15 +82,20 @@ public class CreditCard extends Account{
     }
 
     public void setInterestRate(BigDecimal interestRate) {
-        if(interestRate.compareTo(MIN_INTEREST_RATE) <= 0){
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
-                    , "Interest rate invalid. Interest rate is lower than the established lower limit" + MIN_INTEREST_RATE);
-        } else if(interestRate.compareTo(MAX_INTEREST_RATE) <= 0 ){
-            this.interestRate = interestRate;
+        if(interestRate == null){
+            this.interestRate = MAX_INTEREST_RATE;
         } else{
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
-                    , "Interest rate invalid. Interest rate exceeds maximum limit" + MAX_INTEREST_RATE);
+            if(interestRate.compareTo(MIN_INTEREST_RATE) <= 0){
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
+                        , "Interest rate invalid. Interest rate is lower than the established lower limit" + MIN_INTEREST_RATE);
+            } else if(interestRate.compareTo(MAX_INTEREST_RATE) <= 0 ){
+                this.interestRate = interestRate;
+            } else{
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
+                        , "Interest rate invalid. Interest rate exceeds maximum limit" + MAX_INTEREST_RATE);
+            }
         }
+
     }
 
     public Money getMIN_CREDIT_LIMIT() {

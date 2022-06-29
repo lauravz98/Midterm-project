@@ -17,7 +17,7 @@ public class SecurityConfiguration {
         http.httpBasic(); // basic auth
         http.csrf().disable(); // Disable protection CSRF
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/hello-world", "/hello-user").authenticated() // solo usuarios autenticados
+                .antMatchers(HttpMethod.GET, "/account").authenticated() // solo usuarios autenticados
                 .antMatchers(HttpMethod.GET, "/hello/**").hasRole("ADMIN") // Solo ADMIN
                 .antMatchers(HttpMethod.POST, "/hello-post").hasAnyRole("TECHNICIAN") // Solo ADMIN y TECHNICIAN
                 .anyRequest().permitAll(); // Others endpoints son public
