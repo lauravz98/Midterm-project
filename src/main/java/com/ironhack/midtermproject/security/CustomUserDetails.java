@@ -1,6 +1,7 @@
 package com.ironhack.midtermproject.security;
 
 import com.ironhack.midtermproject.models.User;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,9 +19,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>(); // Mi lista de roles
-        authorities.add(new SimpleGrantedAuthority("ROLE_"+user.getUserRole().toString()));
-
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getUserRole().toString()));
         return authorities;
     }
 
