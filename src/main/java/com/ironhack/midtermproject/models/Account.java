@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 import java.sql.Timestamp;
 
@@ -192,5 +193,18 @@ public abstract class Account {
 
     public void setTypeAccount(TypeAccountEnum typeAccount) {
         this.typeAccount = typeAccount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Objects.equals(primaryOwner, account.primaryOwner) && typeAccount == account.typeAccount;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(primaryOwner, typeAccount);
     }
 }
