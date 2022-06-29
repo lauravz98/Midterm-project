@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.sql.Timestamp;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Account {
 
     @Id

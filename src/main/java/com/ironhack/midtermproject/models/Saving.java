@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
+@PrimaryKeyJoinColumn(name = "id")
 public class Saving extends Account{
     @Embedded
     @AttributeOverrides({
