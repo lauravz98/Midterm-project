@@ -2,9 +2,11 @@ package com.ironhack.midtermproject.service.impl;
 
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyDTO;
+import com.ironhack.midtermproject.models.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.users.AccountHolder;
 import com.ironhack.midtermproject.repository.AccountHolderRepository;
+import com.ironhack.midtermproject.repository.TransferRepository;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
 import com.ironhack.midtermproject.service.interfaces.AccountHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class AccountHolderServiceImpl implements AccountHolderService {
 
     @Autowired
     private AccountHolderRepository accountHolderRepository;
+
+    @Autowired
+    private TransferRepository transferRepository;
     public Set<Account> findMyAccountsByAccountHolderId(Long id) {
         AccountHolder accountHolder = accountHolderRepository.findById(id)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -54,14 +59,38 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "Account Receiver not found. Invalid account ID"));
 
-        if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())
-        || accountReceiver.getSecondaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())) {
-            accountSender.setBalance(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()));
-            accountReceiver.setBalance(accountSender.getBalance().increaseAmount(transferSendMoneyDTO.getAmountMoney()));
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Transfer receiver's name is invalid." +
-                            "The name provided doesn't match the owners of the account number given.");
+        Transfer transfer;
+        if(accountReceiver.getSecondaryOwner()!= null){
+            if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())
+                    || accountReceiver.getSecondaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())) {
+                accountSender.setBalance(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                accountReceiver.setBalance(accountSender.getBalance().increaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                transfer = new Transfer(accountSender, accountReceiver, transferSendMoneyDTO.getAmountMoney(), nameSender);
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Transfer receiver's name is invalid." +
+                                "The name provided doesn't match the owners of the account number given.");
+            }
         }
+        else{
+            //System.out.println(accountSender.getBalance()+ "-------- previo enviar");
+            //System.out.println(accountReceiver.getBalance()+ "-------- previo recibidor");
+            if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())) {
+                //System.out.println(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()) + "---- new");
+                accountSender.setBalance(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                //System.out.println(accountSender.getBalance()+ "-------- despues de enviar");
+
+                accountReceiver.setBalance(accountReceiver.getBalance().increaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                //System.out.println(accountReceiver.getBalance()+ "-------- posterior recibidor");
+                transfer = new Transfer(accountSender, accountReceiver, transferSendMoneyDTO.getAmountMoney(), nameSender);
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Transfer receiver's name is invalid." +
+                                "The name provided doesn't match the owners of the account number given.");
+            }
+        }
+        accountRepository.saveAll(List.of(accountReceiver, accountReceiver));
+        transferRepository.save(transfer);
+
     }
 }

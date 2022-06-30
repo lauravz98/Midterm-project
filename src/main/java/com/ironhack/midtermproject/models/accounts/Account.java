@@ -128,29 +128,35 @@ public abstract class Account {
     public void setSecretKey(String secretKey) { this.secretKey = secretKey; }
 
     public void setBalance(Money balance) {
-        Money balanceNegative = new Money(new BigDecimal(0));
+        BigDecimal zero = new BigDecimal(0);
         if(balance == null){
-            this.balance = balanceNegative;
+            this.balance = new Money(zero);
         }else{
-            if(balanceNegative.compareTo(balance) > 0){
+            if(balance.getAmount().compareTo(zero) != 1){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
-                        "Balance is lower minimum allow: 0 USD");
+                        "This action cannot be processed because the balance would be less than the minimum allowed (0 USD). " +
+                                "Balance negative. Action unprocessable");
+            } else {
+                this.balance = balance;
             }
-            this.balance = balance;
+
         }
     }
 
     public void setBalance(BigDecimal balanceBigDecimal) {
-        Money balanceNegative = new Money(new BigDecimal(0));
-        Money balance = new Money(balanceBigDecimal);
-        if(balance == null){
-            this.balance = balanceNegative;
+        BigDecimal zero = new BigDecimal(0);
+        if(balanceBigDecimal == null){
+            this.balance = new Money(zero);
         }else{
-            if(balanceNegative.compareTo(balance) > 0){
+            // System.out.println(balanceBigDecimal.compareTo(zero) + "-----    comparacio");
+            if(balanceBigDecimal.compareTo(zero) != 1){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
-                        "Balance is lower minimum allow: 0 USD. Action unproceessable");
+                        "This action cannot be processed because the balance would be less than the minimum allowed (0 USD). " +
+                                "Balance negative. Action unprocessable");
+            } else{
+                this.balance = new Money(balanceBigDecimal);
             }
-            this.balance = balance;
+
         }
     }
 

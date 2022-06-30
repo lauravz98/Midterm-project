@@ -69,10 +69,10 @@ public class Saving extends Account{
         if(minimumBalance == null){
             this.minimumBalance = MIN_MINIMUM_BALANCE;
         } else {
-            if(minimumBalance.compareTo(MIN_MINIMUM_BALANCE) < 0){
+            if(minimumBalance.getAmount().compareTo(MIN_MINIMUM_BALANCE.getAmount()) != 1){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
                         , "The minimum balance is lower than the established lower limit" + MIN_MINIMUM_BALANCE);
-            } else if(minimumBalance.compareTo(MAX_MINIMUM_BALANCE) <= 0 ){
+            } else if(minimumBalance.getAmount().compareTo(MAX_MINIMUM_BALANCE.getAmount()) != 1 ){
                 this.minimumBalance = minimumBalance;
             } else{
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
@@ -90,10 +90,10 @@ public class Saving extends Account{
         if(interestRate == null){
             this.interestRate = new BigDecimal(0.0025);
         } else {
-            if(interestRate.compareTo(MIN_INTEREST_RATE) <= 0){
+            if(interestRate.compareTo(MIN_INTEREST_RATE) != 1) {
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
                         , "Interest rate invalid. Interest rate is lower than the established lower limit" + MIN_INTEREST_RATE);
-            } else if(interestRate.compareTo(MAX_INTEREST_RATE) >= 0 ){
+            } else if(interestRate.compareTo(MAX_INTEREST_RATE) != 1 ){
                 this.interestRate = interestRate;
             } else{
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
@@ -105,8 +105,9 @@ public class Saving extends Account{
 
     @Override
     public void setBalance(Money balance) {
-        if(balance.compareTo(getMinimumBalance()) < 0){
+        if(balance.getAmount().compareTo(getMinimumBalance().getAmount()) != 1){
             super.setBalance(getBalance().decreaseAmount(getPENALTY_FEE()));
+            System.out.println("A penalty of 40 USD will be applied because the balance is less than the minimum allowed. ");
             //throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
             //        "Balance is lower minimum allow: " + MINIMUM_BALANCE);
         } else {

@@ -35,7 +35,7 @@ public class AccountHolderControllerImpl implements AccountHolderController {
         return accountHolderService.findMyAccountByAccountId(accountId, userDetails.getUser().getId());
     }
 
-    @PatchMapping("/accounts/{accountId}/transfer")
+    @PatchMapping("/myAccounts/{accountId}/transfer")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void sendMoney(@PathVariable Long accountId, @AuthenticationPrincipal CustomUserDetails userDetails,
                           @RequestBody @Valid TransferSendMoneyDTO transferSendMoneyDTO) {

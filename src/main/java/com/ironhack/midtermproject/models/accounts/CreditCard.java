@@ -66,10 +66,10 @@ public class CreditCard extends Account{
         if(creditLimit == null){
             this.creditLimit = MIN_CREDIT_LIMIT;
         }else {
-            if(creditLimit.compareTo(MIN_CREDIT_LIMIT) <= 0){
+            if(creditLimit.getAmount().compareTo(MIN_CREDIT_LIMIT.getAmount()) != 1){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
                         , "The credit limit is lower than the established lower limit" + MIN_CREDIT_LIMIT);
-            } else if(creditLimit.compareTo(MAX_CREDIT_LIMIT) <= 0 ){
+            } else if(creditLimit.getAmount().compareTo(MAX_CREDIT_LIMIT.getAmount()) != 1){
                 this.creditLimit = creditLimit;
             } else{
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
@@ -86,10 +86,10 @@ public class CreditCard extends Account{
         if(interestRate == null){
             this.interestRate = MAX_INTEREST_RATE;
         } else{
-            if(interestRate.compareTo(MIN_INTEREST_RATE) <= 0){
+            if(interestRate.compareTo(MIN_INTEREST_RATE) != 1){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
                         , "Interest rate invalid. Interest rate is lower than the established lower limit" + MIN_INTEREST_RATE);
-            } else if(interestRate.compareTo(MAX_INTEREST_RATE) <= 0 ){
+            } else if(interestRate.compareTo(MAX_INTEREST_RATE) != 1 ){
                 this.interestRate = interestRate;
             } else{
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
