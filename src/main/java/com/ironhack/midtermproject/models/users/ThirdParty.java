@@ -1,4 +1,4 @@
-package com.ironhack.midtermproject.models;
+package com.ironhack.midtermproject.models.users;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

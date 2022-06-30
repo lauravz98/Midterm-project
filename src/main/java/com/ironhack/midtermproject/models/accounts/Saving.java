@@ -1,8 +1,8 @@
-package com.ironhack.midtermproject.models;
+package com.ironhack.midtermproject.models.accounts;
 
 import com.ironhack.midtermproject.classes.Money;
-import com.ironhack.midtermproject.enums.StatusAccountEnum;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
+import com.ironhack.midtermproject.models.users.AccountHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -59,6 +59,9 @@ public class Saving extends Account{
     }
 
     public Money getMinimumBalance() {
+        if(minimumBalance == null){
+            this.minimumBalance = MIN_MINIMUM_BALANCE;
+        }
         return minimumBalance;
     }
 
@@ -66,10 +69,10 @@ public class Saving extends Account{
         if(minimumBalance == null){
             this.minimumBalance = MIN_MINIMUM_BALANCE;
         } else {
-            if(MIN_MINIMUM_BALANCE.compareTo(minimumBalance) >= 0){
+            if(minimumBalance.compareTo(MIN_MINIMUM_BALANCE) < 0){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
                         , "The minimum balance is lower than the established lower limit" + MIN_MINIMUM_BALANCE);
-            } else if(MAX_MINIMUM_BALANCE.compareTo(minimumBalance) >= 0 ){
+            } else if(minimumBalance.compareTo(MAX_MINIMUM_BALANCE) <= 0 ){
                 this.minimumBalance = minimumBalance;
             } else{
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
@@ -102,11 +105,13 @@ public class Saving extends Account{
 
     @Override
     public void setBalance(Money balance) {
-        if(balance.compareTo(MIN_MINIMUM_BALANCE) > 0){
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
-                    "Balance is lower minimum allow: " + minimumBalance);
+        if(balance.compareTo(getMinimumBalance()) < 0){
+            super.setBalance(getBalance().decreaseAmount(getPENALTY_FEE()));
+            //throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+            //        "Balance is lower minimum allow: " + MINIMUM_BALANCE);
+        } else {
+            super.setBalance(balance);
         }
-        super.setBalance(balance);
     }
 
     public Money getMIN_MINIMUM_BALANCE() {

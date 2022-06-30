@@ -1,7 +1,8 @@
-package com.ironhack.midtermproject.models;
+package com.ironhack.midtermproject.models.users;
 
 import com.ironhack.midtermproject.classes.Address;
 import com.ironhack.midtermproject.enums.UserRole;
+import com.ironhack.midtermproject.models.accounts.Account;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;

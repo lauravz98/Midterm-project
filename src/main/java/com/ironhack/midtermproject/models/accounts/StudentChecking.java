@@ -1,15 +1,12 @@
-package com.ironhack.midtermproject.models;
+package com.ironhack.midtermproject.models.accounts;
 
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import com.ironhack.midtermproject.models.users.AccountHolder;
 
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.function.BiConsumer;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")

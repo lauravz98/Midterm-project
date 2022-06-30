@@ -1,8 +1,8 @@
-package com.ironhack.midtermproject.repository;
+package com.ironhack.midtermproject.repository.accounts;
 
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
-import com.ironhack.midtermproject.models.Account;
-import com.ironhack.midtermproject.models.AccountHolder;
+import com.ironhack.midtermproject.models.accounts.Account;
+import com.ironhack.midtermproject.models.users.AccountHolder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

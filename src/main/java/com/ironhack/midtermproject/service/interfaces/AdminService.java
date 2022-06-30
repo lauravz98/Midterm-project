@@ -2,10 +2,10 @@ package com.ironhack.midtermproject.service.interfaces;
 
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
-import com.ironhack.midtermproject.models.Account;
-import com.ironhack.midtermproject.models.Checking;
-import com.ironhack.midtermproject.models.CreditCard;
-import com.ironhack.midtermproject.models.Saving;
+import com.ironhack.midtermproject.models.accounts.Account;
+import com.ironhack.midtermproject.models.accounts.Checking;
+import com.ironhack.midtermproject.models.accounts.CreditCard;
+import com.ironhack.midtermproject.models.accounts.Saving;
 
 import java.util.List;
 

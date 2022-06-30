@@ -1,12 +1,17 @@
 package com.ironhack.midtermproject.controller.interfaces;
 
-import com.ironhack.midtermproject.controller.dto.AccountHolderIdDTO;
-import com.ironhack.midtermproject.models.Account;
+import com.ironhack.midtermproject.controller.dto.TransferSendMoneyDTO;
+import com.ironhack.midtermproject.models.Transfer;
+import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.security.CustomUserDetails;
 
 import java.util.Set;
 
 public interface AccountHolderController {
 
-    Set<Account> findMyAccountsById(CustomUserDetails userDetails);
+    Set<Account> findMyAccountsByAccountHolderId(CustomUserDetails userDetails);
+
+    Account findMyAccountByAccountId(Long accountId, CustomUserDetails userDetails);
+
+    void sendMoney(Long accountId, CustomUserDetails userDetails, TransferSendMoneyDTO transferSendMoneyDTO);
 }

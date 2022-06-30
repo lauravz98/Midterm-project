@@ -1,6 +1,6 @@
 package com.ironhack.midtermproject.repository;
 
-import com.ironhack.midtermproject.models.AccountHolder;
+import com.ironhack.midtermproject.models.users.AccountHolder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

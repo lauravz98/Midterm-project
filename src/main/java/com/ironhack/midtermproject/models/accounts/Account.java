@@ -1,14 +1,17 @@
-package com.ironhack.midtermproject.models;
+package com.ironhack.midtermproject.models.accounts;
 
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.enums.StatusAccountEnum;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
+import com.ironhack.midtermproject.models.Transfer;
+import com.ironhack.midtermproject.models.users.AccountHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static com.ironhack.midtermproject.utils.utils.getDateNow;
@@ -37,6 +40,11 @@ public abstract class Account {
     @JoinColumn(name = "id_secondary_owner")
     private AccountHolder secondaryOwner;
 
+    @OneToMany(mappedBy = "accountSender")
+    private List<Transfer> transfersSender;
+
+    @OneToMany(mappedBy = "accountReceiver")
+    private List<Transfer> transfersReceiver;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "amount_penalty_fee")),
@@ -131,6 +139,21 @@ public abstract class Account {
             this.balance = balance;
         }
     }
+
+    public void setBalance(BigDecimal balanceBigDecimal) {
+        Money balanceNegative = new Money(new BigDecimal(0));
+        Money balance = new Money(balanceBigDecimal);
+        if(balance == null){
+            this.balance = balanceNegative;
+        }else{
+            if(balanceNegative.compareTo(balance) > 0){
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                        "Balance is lower minimum allow: 0 USD. Action unproceessable");
+            }
+            this.balance = balance;
+        }
+    }
+
 
     public void setPrimaryOwner(AccountHolder primaryOwner) { this.primaryOwner = primaryOwner; }
     public void setSecondaryOwner(AccountHolder secondaryOwner) { this.secondaryOwner = secondaryOwner;}

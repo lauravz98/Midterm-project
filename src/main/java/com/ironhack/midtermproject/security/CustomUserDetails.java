@@ -1,6 +1,6 @@
 package com.ironhack.midtermproject.security;
 
-import com.ironhack.midtermproject.models.User;
+import com.ironhack.midtermproject.models.users.User;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
