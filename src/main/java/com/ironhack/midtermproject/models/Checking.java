@@ -17,14 +17,14 @@ public class Checking extends Account{
             @AttributeOverride(name = "amount", column = @Column(name = "amount_minimumBalance")),
             @AttributeOverride(name = "currency", column = @Column(name = "currency_minimumBalance"))
     })
-    private final Money MINIMUM_BALANCE = new Money(new BigDecimal(250));
+    private final static Money MINIMUM_BALANCE = new Money(new BigDecimal(250));
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "amount_monthlyMaintenanceFee")),
             @AttributeOverride(name = "currency", column = @Column(name = "currency_monthlyMaintenanceFee"))
     })
-    private final Money MONTHLY_MAINTENANCE_FEE = new Money(new BigDecimal(12));
+    private final static Money MONTHLY_MAINTENANCE_FEE = new Money(new BigDecimal(12));;
 
     public Checking() {
         super();
@@ -41,7 +41,6 @@ public class Checking extends Account{
         setTypeAccount(TypeAccountEnum.CHECKING);
     }
 
-
     public Money getMINIMUM_BALANCE() {
         return MINIMUM_BALANCE;
     }
@@ -52,7 +51,7 @@ public class Checking extends Account{
 
     @Override
     public void setBalance(Money balance) {
-        if(balance.compareTo(MINIMUM_BALANCE) < 0){
+        if(balance.compareTo(MINIMUM_BALANCE) > 0){
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
                     "Balance is lower minimum allow: " + MINIMUM_BALANCE);
         }

@@ -42,7 +42,7 @@ public abstract class Account {
             @AttributeOverride(name = "amount", column = @Column(name = "amount_penalty_fee")),
             @AttributeOverride(name = "currency", column = @Column(name = "currency_penalty_fee"))
     })
-    private final Money PENALTY_FEE = new Money(new BigDecimal(40));
+    private static final Money PENALTY_FEE = new Money(new BigDecimal(40));
 
     @Enumerated(EnumType.STRING)
     private StatusAccountEnum statusAccount;
@@ -90,6 +90,7 @@ public abstract class Account {
         this.creationDate = creationDate;
         this.secretKey = secretKey;
     }*/
+
     protected Account(AccountHolder primaryOwner, String secretKey) {
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = null;
@@ -107,66 +108,33 @@ public abstract class Account {
         setBalance(balance);
     }
 
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public Money getBalance() {
-        return balance;
-    }
-
-    public AccountHolder getPrimaryOwner() {
-        return primaryOwner;
-    }
-
-    public AccountHolder getSecondaryOwner() {
-        return secondaryOwner;
-    }
-
-    public Money getPENALTY_FEE() {
-        return PENALTY_FEE;
-    }
-
-    public StatusAccountEnum getStatusAccount() {
-        return statusAccount;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public TypeAccountEnum getTypeAccount() {
-        return typeAccount;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
+    public Long getAccountId() { return accountId; }
+    public Money getBalance() { return balance; }
+    public AccountHolder getPrimaryOwner() { return primaryOwner; }
+    public AccountHolder getSecondaryOwner() { return secondaryOwner; }
+    public Money getPENALTY_FEE() { return PENALTY_FEE; }
+    public StatusAccountEnum getStatusAccount() { return statusAccount; }
+    public Date getCreationDate() { return creationDate; }
+    public TypeAccountEnum getTypeAccount() { return typeAccount; }
+    public void setAccountId(Long accountId) { this.accountId = accountId; }
+    public void setSecretKey(String secretKey) { this.secretKey = secretKey; }
 
     public void setBalance(Money balance) {
-        if(balance.compareTo(new Money(new BigDecimal(0))) < 0){
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
-                    "Balance is lower minimum allow: 0 USD");
+        Money balanceNegative = new Money(new BigDecimal(0));
+        if(balance == null){
+            this.balance = balanceNegative;
+        }else{
+            if(balanceNegative.compareTo(balance) > 0){
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                        "Balance is lower minimum allow: 0 USD");
+            }
+            this.balance = balance;
         }
-        this.balance = balance;
     }
 
-    public void setPrimaryOwner(AccountHolder primaryOwner) {
-        this.primaryOwner = primaryOwner;
-    }
-
-    public void setSecondaryOwner(AccountHolder secondaryOwner) {
-        this.secondaryOwner = secondaryOwner;
-    }
-
-    public void setStatusAccount(StatusAccountEnum statusAccount) {
-        this.statusAccount = statusAccount;
-    }
+    public void setPrimaryOwner(AccountHolder primaryOwner) { this.primaryOwner = primaryOwner; }
+    public void setSecondaryOwner(AccountHolder secondaryOwner) { this.secondaryOwner = secondaryOwner;}
+    public void setStatusAccount(StatusAccountEnum statusAccount) { this.statusAccount = statusAccount; }
 
     public void setCreationDate(Date creationDate) {
         if(creationDate == null){
@@ -176,13 +144,8 @@ public abstract class Account {
         }
     }
 
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public void setTypeAccount(TypeAccountEnum typeAccount) {
-        this.typeAccount = typeAccount;
-    }
+    public String getSecretKey() { return secretKey; }
+    public void setTypeAccount(TypeAccountEnum typeAccount) { this.typeAccount = typeAccount; }
 
     @Override
     public boolean equals(Object o) {

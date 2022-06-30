@@ -78,8 +78,11 @@ public class Money {
     }
 
     public int compareTo(Money money){
-        int result = this.amount.compareTo(money.amount);
-        return result;
+        if(money == null){
+            int result = this.amount.compareTo(money.getAmount());
+            return result;
+        }
+        return 0;
     }
 
 }

@@ -24,18 +24,18 @@ public class CreditCard extends Account{
             @AttributeOverride(name = "amount", column = @Column(name = "amount_creditLimit_min")),
             @AttributeOverride(name = "currency", column = @Column(name = "currency_creditLimit_min"))
     })
-    private final Money MIN_CREDIT_LIMIT  = new Money(new BigDecimal(100));
+    private static final Money MIN_CREDIT_LIMIT  = new Money(new BigDecimal(100));
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "amount_creditLimit_max")),
             @AttributeOverride(name = "currency", column = @Column(name = "currency_creditLimit_max"))
     })
-    private final Money MAX_CREDIT_LIMIT = new Money(new BigDecimal(100000));
+    private static final Money MAX_CREDIT_LIMIT = new Money(new BigDecimal(100000));
 
     private BigDecimal interestRate;
-    private final BigDecimal MIN_INTEREST_RATE = new BigDecimal(0.1);
-    private final BigDecimal MAX_INTEREST_RATE = new BigDecimal(0.2);
+    private static final BigDecimal MIN_INTEREST_RATE = new BigDecimal(0.1);
+    private static final BigDecimal MAX_INTEREST_RATE = new BigDecimal(0.2);
 
     public CreditCard() {
         super();
@@ -45,14 +45,14 @@ public class CreditCard extends Account{
         super(primaryOwner, secretKey);
         setCreditLimit(MIN_CREDIT_LIMIT);
         setInterestRate(MAX_INTEREST_RATE);
-        setTypeAccount(TypeAccountEnum.CREDIT);
+        setTypeAccount(TypeAccountEnum.CREDIT_CARD);
         setBalance(balance);
     }
 
     public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate,
                       String secretKey, Money balance, Money creditLimit, BigDecimal interestRate) {
         super(primaryOwner, secondaryOwner, creationDate, secretKey, balance);
-        setTypeAccount(TypeAccountEnum.CREDIT);
+        setTypeAccount(TypeAccountEnum.CREDIT_CARD);
         setCreditLimit(creditLimit);
         setInterestRate(interestRate);
     }

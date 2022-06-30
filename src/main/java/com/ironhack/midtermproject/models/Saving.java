@@ -25,18 +25,18 @@ public class Saving extends Account{
             @AttributeOverride(name = "amount", column = @Column(name = "amount_minimumBalance_min")),
             @AttributeOverride(name = "currency", column = @Column(name = "currency_minimumBalance_min"))
     })
-    private final Money MIN_MINIMUM_BALANCE = new Money(new BigDecimal(100));
+    private final static Money MIN_MINIMUM_BALANCE = new Money(new BigDecimal(100));
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "amount_minimumBalance_max")),
             @AttributeOverride(name = "currency", column = @Column(name = "currency_minimumBalance_max"))
     })
-    private final Money MAX_MINIMUM_BALANCE = new Money(new BigDecimal(1000));
+    private final static Money MAX_MINIMUM_BALANCE = new Money(new BigDecimal(1000));
 
     private BigDecimal interestRate;
-    private final BigDecimal MIN_INTEREST_RATE = new BigDecimal(0);
-    private final BigDecimal MAX_INTEREST_RATE = new BigDecimal(0.5);
+    private final static BigDecimal MIN_INTEREST_RATE = new BigDecimal(0);
+    private final static BigDecimal MAX_INTEREST_RATE = new BigDecimal(0.5);
 
     public Saving() {
         super();
@@ -52,8 +52,8 @@ public class Saving extends Account{
 
     public Saving(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money balance, Money minimumBalance, BigDecimal interestRate) {
         super(primaryOwner, secondaryOwner, creationDate, secretKey, balance);
-        setTypeAccount(TypeAccountEnum.SAVINGS);
         setMinimumBalance(minimumBalance);
+        setTypeAccount(TypeAccountEnum.SAVINGS);
         setInterestRate(interestRate);
         setBalance(balance);
     }
@@ -66,10 +66,10 @@ public class Saving extends Account{
         if(minimumBalance == null){
             this.minimumBalance = MIN_MINIMUM_BALANCE;
         } else {
-            if(minimumBalance.compareTo(MIN_MINIMUM_BALANCE) <= 0){
+            if(MIN_MINIMUM_BALANCE.compareTo(minimumBalance) >= 0){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
                         , "The minimum balance is lower than the established lower limit" + MIN_MINIMUM_BALANCE);
-            } else if(minimumBalance.compareTo(MAX_MINIMUM_BALANCE) <= 0 ){
+            } else if(MAX_MINIMUM_BALANCE.compareTo(minimumBalance) >= 0 ){
                 this.minimumBalance = minimumBalance;
             } else{
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
@@ -84,14 +84,13 @@ public class Saving extends Account{
     }
 
     public void setInterestRate(BigDecimal interestRate) {
-
         if(interestRate == null){
             this.interestRate = new BigDecimal(0.0025);
         } else {
             if(interestRate.compareTo(MIN_INTEREST_RATE) <= 0){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
                         , "Interest rate invalid. Interest rate is lower than the established lower limit" + MIN_INTEREST_RATE);
-            } else if(interestRate.compareTo(MAX_INTEREST_RATE) <= 0 ){
+            } else if(interestRate.compareTo(MAX_INTEREST_RATE) >= 0 ){
                 this.interestRate = interestRate;
             } else{
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
@@ -103,7 +102,7 @@ public class Saving extends Account{
 
     @Override
     public void setBalance(Money balance) {
-        if(balance.compareTo(minimumBalance) < 0){
+        if(balance.compareTo(MIN_MINIMUM_BALANCE) > 0){
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
                     "Balance is lower minimum allow: " + minimumBalance);
         }

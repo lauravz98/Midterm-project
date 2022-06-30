@@ -17,10 +17,12 @@ public class SecurityConfiguration {
         http.httpBasic(); // basic auth
         http.csrf().disable(); // Disable protection CSRF
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/account").authenticated() // solo usuarios autenticados
-                .antMatchers(HttpMethod.GET, "/hello/**").hasRole("ADMIN") // Solo ADMIN
-                .antMatchers(HttpMethod.POST, "/hello-post").hasAnyRole("TECHNICIAN") // Solo ADMIN y TECHNICIAN
-                .anyRequest().permitAll(); // Others endpoints son public
+                .antMatchers(HttpMethod.GET, "/myAccounts").authenticated() // solo usuarios autenticados
+                .antMatchers(HttpMethod.GET, "/accounts/**").hasRole("ADMIN") // Solo ADMIN
+                .antMatchers(HttpMethod.POST, "/accounts/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PATCH, "/accounts/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/accounts/**").hasRole("ADMIN");
+                //.anyRequest().permitAll(); // Others endpoints son public
         return http.build();
     }
 

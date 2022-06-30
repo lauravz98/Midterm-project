@@ -1,6 +1,7 @@
 package com.ironhack.midtermproject.service.impl;
 
 import com.ironhack.midtermproject.classes.Money;
+import com.ironhack.midtermproject.enums.TypeAccountEnum;
 import com.ironhack.midtermproject.models.*;
 import com.ironhack.midtermproject.repository.AccountRepository;
 import com.ironhack.midtermproject.repository.AdminRepository;
@@ -12,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import static com.ironhack.midtermproject.utils.utils.convertToLocalDateViaInstant;
 
@@ -28,6 +30,10 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Account not found. Invalid account ID"));
         return account;
+    }
+
+    public List<Account> findByTypeAccount(TypeAccountEnum typeAccount) {
+        return accountRepository.findByTypeAccount(typeAccount);
     }
 
     public Account createCheckingAccount(Checking checkingAccount) {
@@ -53,13 +59,12 @@ public class AdminServiceImpl implements AdminService {
                 savingAccount.getMinimumBalance(), savingAccount.getInterestRate());
         return accountRepository.save(account);
     }
-    public Account createCreditCard(CreditCard creditCard) {
+    public CreditCard createCreditCard(CreditCard creditCard) {
         CreditCard account = new CreditCard(creditCard.getPrimaryOwner(), creditCard.getSecondaryOwner(),
                 creditCard.getCreationDate(), creditCard.getSecretKey(), creditCard.getBalance(),
                 creditCard.getCreditLimit(), creditCard.getInterestRate());
         return accountRepository.save(account);
     }
-
 
     public void updateBalance(Long accountId, Money balance) {
         Account account = accountRepository.findById(accountId)
@@ -76,8 +81,5 @@ public class AdminServiceImpl implements AdminService {
         accountRepository.delete(account);
 
     }
-
-
-
 
 }

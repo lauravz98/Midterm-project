@@ -1,7 +1,9 @@
 package com.ironhack.midtermproject.controller.impl;
 
+import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.AccountBalanceDTO;
 import com.ironhack.midtermproject.controller.interfaces.AdminController;
+import com.ironhack.midtermproject.enums.TypeAccountEnum;
 import com.ironhack.midtermproject.models.Account;
 import com.ironhack.midtermproject.models.Checking;
 import com.ironhack.midtermproject.models.CreditCard;
@@ -34,6 +36,17 @@ public class AdminControllerImpl implements AdminController {
     public Account findAccountById(@PathVariable Long accountId) {
         return adminService.findAccountById(accountId);
     }
+    @GetMapping("/accounts/balance/{accountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Money getBalance(@PathVariable Long accountId) {
+        Account account = adminService.findAccountById(accountId);
+        return account.getBalance();
+    }
+    @GetMapping("/accounts/typeAccount/{typeAccount}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Account> findByTypeAccount(@PathVariable TypeAccountEnum typeAccount) {
+        return adminService.findByTypeAccount(typeAccount);
+    }
     @PostMapping("/accounts/checking") // Created checking account
     @ResponseStatus(HttpStatus.CREATED)
     public Account store(@RequestBody @Valid Checking checkingAccount){
@@ -49,6 +62,8 @@ public class AdminControllerImpl implements AdminController {
     public Account store(CreditCard creditCard) {
         return adminService.createCreditCard(creditCard);
     }
+
+
 
     @PatchMapping("/accounts/{accountId}/balance")
     @ResponseStatus(HttpStatus.NO_CONTENT)
