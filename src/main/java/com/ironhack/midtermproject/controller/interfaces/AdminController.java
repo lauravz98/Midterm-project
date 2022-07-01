@@ -3,6 +3,7 @@ package com.ironhack.midtermproject.controller.interfaces;
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.AccountBalanceDTO;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
+import com.ironhack.midtermproject.models.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.accounts.Checking;
 import com.ironhack.midtermproject.models.accounts.CreditCard;
@@ -17,6 +18,7 @@ public interface AdminController {
     Account findAccountById(Long accountId);
     Money getBalance(Long accountId);
     List<Account> findByTypeAccount(TypeAccountEnum typeAccount);
+    List<Transfer> findAllTransfer();
 
     // Post
     Account store(Checking checkingAccount);

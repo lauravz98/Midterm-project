@@ -4,10 +4,12 @@ import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.AccountBalanceDTO;
 import com.ironhack.midtermproject.controller.interfaces.AdminController;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
+import com.ironhack.midtermproject.models.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.accounts.Checking;
 import com.ironhack.midtermproject.models.accounts.CreditCard;
 import com.ironhack.midtermproject.models.accounts.Saving;
+import com.ironhack.midtermproject.repository.TransferRepository;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
 import com.ironhack.midtermproject.service.interfaces.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class AdminControllerImpl implements AdminController {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private TransferRepository transferRepository;
 
     @GetMapping("/accounts")
     @ResponseStatus(HttpStatus.OK)
@@ -47,6 +52,12 @@ public class AdminControllerImpl implements AdminController {
     public List<Account> findByTypeAccount(@PathVariable TypeAccountEnum typeAccount) {
         return adminService.findByTypeAccount(typeAccount);
     }
+    @GetMapping("/accounts/transfers")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Transfer> findAllTransfer() {
+        return transferRepository.findAll();
+    }
+
     @PostMapping("/accounts/checking") // Created checking account
     @ResponseStatus(HttpStatus.CREATED)
     public Account store(@RequestBody @Valid Checking checkingAccount){
