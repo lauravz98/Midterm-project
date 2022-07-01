@@ -1,6 +1,5 @@
 package com.ironhack.midtermproject.service.impl;
 
-import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyDTO;
 import com.ironhack.midtermproject.models.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
@@ -65,7 +64,8 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                     || accountReceiver.getSecondaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())) {
                 accountSender.setBalance(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()));
                 accountReceiver.setBalance(accountSender.getBalance().increaseAmount(transferSendMoneyDTO.getAmountMoney()));
-                transfer = new Transfer(accountSender, accountReceiver, transferSendMoneyDTO.getAmountMoney(), nameSender);
+                transfer = new Transfer(accountSender, accountReceiver, transferSendMoneyDTO.getAmountMoney(),
+                        nameSender,transferSendMoneyDTO.getNameReceiver());
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Transfer receiver's name is invalid." +
@@ -73,16 +73,13 @@ public class AccountHolderServiceImpl implements AccountHolderService {
             }
         }
         else{
-            //System.out.println(accountSender.getBalance()+ "-------- previo enviar");
-            //System.out.println(accountReceiver.getBalance()+ "-------- previo recibidor");
             if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())) {
                 //System.out.println(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()) + "---- new");
                 accountSender.setBalance(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()));
-                //System.out.println(accountSender.getBalance()+ "-------- despues de enviar");
-
                 accountReceiver.setBalance(accountReceiver.getBalance().increaseAmount(transferSendMoneyDTO.getAmountMoney()));
                 //System.out.println(accountReceiver.getBalance()+ "-------- posterior recibidor");
-                transfer = new Transfer(accountSender, accountReceiver, transferSendMoneyDTO.getAmountMoney(), nameSender);
+                transfer = new Transfer(accountSender, accountReceiver, transferSendMoneyDTO.getAmountMoney(),
+                        nameSender, transferSendMoneyDTO.getNameReceiver());
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Transfer receiver's name is invalid." +
@@ -92,5 +89,15 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         accountRepository.saveAll(List.of(accountReceiver, accountReceiver));
         transferRepository.save(transfer);
 
+    }
+
+    public List<Transfer> findMyTransfersReceiverByAccountId(Long accountId, long id) {
+        Account myAccount = findMyAccountByAccountId(accountId, id);
+        return transferRepository.findByAccountReceiver(myAccount);
+    }
+
+    public List<Transfer> findMyTransfersSenderByAccountId(Long accountId, long id) {
+        Account myAccount = findMyAccountByAccountId(accountId, id);
+        return transferRepository.findByAccountSenderAccountId(id);
     }
 }
