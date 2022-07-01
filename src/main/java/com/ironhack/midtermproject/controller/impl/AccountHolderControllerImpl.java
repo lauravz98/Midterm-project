@@ -1,9 +1,9 @@
 package com.ironhack.midtermproject.controller.impl;
 
 import com.ironhack.midtermproject.classes.Money;
-import com.ironhack.midtermproject.controller.dto.TransferSendMoneyDTO;
+import com.ironhack.midtermproject.controller.dto.TransferSendMoneyAccountHolderDTO;
 import com.ironhack.midtermproject.controller.interfaces.AccountHolderController;
-import com.ironhack.midtermproject.models.Transfer;
+import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
 import com.ironhack.midtermproject.security.CustomUserDetails;
@@ -53,10 +53,10 @@ public class AccountHolderControllerImpl implements AccountHolderController {
         return accountHolderService.findMyTransfersSenderByAccountId(accountId, userDetails.getUser().getId());
     }
 
-    @PatchMapping("/myAccounts/{accountId}/transfer")
+    @PatchMapping("/myAccounts/{accountId}/transfer/accountHolder")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void sendMoney(@PathVariable Long accountId, @AuthenticationPrincipal CustomUserDetails userDetails,
-                          @RequestBody @Valid TransferSendMoneyDTO transferSendMoneyDTO) {
-        accountHolderService.sendMoney(accountId, userDetails.getUser().getId(), transferSendMoneyDTO);
+    public void sendMoneyAccountHolder(@PathVariable Long accountId, @AuthenticationPrincipal CustomUserDetails userDetails,
+                                       @RequestBody @Valid TransferSendMoneyAccountHolderDTO transferSendMoneyAccountHolderDTO) {
+        accountHolderService.sendMoney(accountId, userDetails.getUser().getId(), transferSendMoneyAccountHolderDTO);
     }
 }

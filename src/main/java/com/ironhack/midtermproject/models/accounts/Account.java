@@ -3,7 +3,8 @@ package com.ironhack.midtermproject.models.accounts;
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.enums.StatusAccountEnum;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
-import com.ironhack.midtermproject.models.Transfer;
+import com.ironhack.midtermproject.models.transfers.Transfer;
+import com.ironhack.midtermproject.models.transfers.TransferOwn;
 import com.ironhack.midtermproject.models.users.AccountHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -42,7 +43,7 @@ public abstract class Account {
     private AccountHolder secondaryOwner;
 
     @OneToMany(mappedBy = "accountSender")
-    private List<Transfer> transfersSender;
+    private List<TransferOwn> transfersSender;
 
     @OneToMany(mappedBy = "accountReceiver")
     private List<Transfer> transfersReceiver;
@@ -148,21 +149,13 @@ public abstract class Account {
     public String getSecretKey() { return secretKey; }
     public void setTypeAccount(TypeAccountEnum typeAccount) { this.typeAccount = typeAccount; }
 
-    public List<Transfer> getTransfersSender() {
-        return transfersSender;
-    }
-
-    public void setTransfersSender(List<Transfer> transfersSender) {
-        this.transfersSender = transfersSender;
-    }
-
-    public List<Transfer> getTransfersReceiver() {
+    /*public List<Transfer> getTransfersReceiver() {
         return transfersReceiver;
     }
 
     public void setTransfersReceiver(List<Transfer> transfersReceiver) {
         this.transfersReceiver = transfersReceiver;
-    }
+    }*/
 
     public LocalDate getLastConsult() {
         return lastConsult;

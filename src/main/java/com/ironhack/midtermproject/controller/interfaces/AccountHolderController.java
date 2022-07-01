@@ -1,8 +1,8 @@
 package com.ironhack.midtermproject.controller.interfaces;
 
 import com.ironhack.midtermproject.classes.Money;
-import com.ironhack.midtermproject.controller.dto.TransferSendMoneyDTO;
-import com.ironhack.midtermproject.models.Transfer;
+import com.ironhack.midtermproject.controller.dto.TransferSendMoneyAccountHolderDTO;
+import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.security.CustomUserDetails;
 
@@ -17,5 +17,6 @@ public interface AccountHolderController {
     List<Transfer> findMyTransfersReceiverByAccountId(Long accountId, CustomUserDetails userDetails);
 
     List<Transfer> findMyTransfersSenderByAccountId(Long accountId, CustomUserDetails userDetails);
-    void sendMoney(Long accountId, CustomUserDetails userDetails, TransferSendMoneyDTO transferSendMoneyDTO);
+    void sendMoneyAccountHolder(Long accountId, CustomUserDetails userDetails, TransferSendMoneyAccountHolderDTO transferSendMoneyAccountHolderDTO);
+    void sendMoneyThirdParty(Long accountId, CustomUserDetails userDetails, TransferSendMoneyAccountHolderDTO transferSendMoneyAccountHolderDTO);
 }

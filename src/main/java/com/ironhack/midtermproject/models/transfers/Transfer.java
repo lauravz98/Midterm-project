@@ -1,21 +1,16 @@
-package com.ironhack.midtermproject.models;
+package com.ironhack.midtermproject.models.transfers;
 
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.models.accounts.Account;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-public class Transfer {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Transfer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "account_sender_id")
-    private Account accountSender;
-
-    private String nameSender;
 
     @ManyToOne
     @JoinColumn(name = "account_receiver_id")
@@ -24,17 +19,14 @@ public class Transfer {
     @Embedded
     private Money amount;
 
-
-
     public Transfer() {
     }
 
-    public Transfer(Account accountSender, Account accountReceiver, Money amount, String nameSender, String nameReceiver) {
-        this.accountSender = accountSender;
+
+    public Transfer(Account accountReceiver, String nameReceiver, Money amount) {
         this.accountReceiver = accountReceiver;
         this.amount = amount;
         this.nameReceiver = nameReceiver;
-        this.nameSender = nameSender;
     }
 
     public Long getId() {
@@ -45,21 +37,11 @@ public class Transfer {
         this.id = id;
     }
 
-    public Long getAccountSender() {
-        return accountSender.getAccountId();
-    }
 
     public Long getAccountReceiver() {
         return accountReceiver.getAccountId();
     }
 
-    public String getNameSender() {
-        return nameSender;
-    }
-
-    public void setNameSender(String nameSender) {
-        this.nameSender = nameSender;
-    }
 
     public Money getAmount() {
         return amount;

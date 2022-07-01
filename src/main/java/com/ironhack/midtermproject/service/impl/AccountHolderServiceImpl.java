@@ -1,10 +1,12 @@
 package com.ironhack.midtermproject.service.impl;
 
 import com.ironhack.midtermproject.classes.Money;
-import com.ironhack.midtermproject.controller.dto.TransferSendMoneyDTO;
-import com.ironhack.midtermproject.models.Transfer;
+import com.ironhack.midtermproject.controller.dto.TransferSendMoneyAccountHolderDTO;
+import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
+import com.ironhack.midtermproject.models.transfers.TransferOwn;
 import com.ironhack.midtermproject.models.users.AccountHolder;
+import com.ironhack.midtermproject.repository.TransferOwnRepository;
 import com.ironhack.midtermproject.repository.users.AccountHolderRepository;
 import com.ironhack.midtermproject.repository.TransferRepository;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
@@ -28,6 +30,9 @@ public class AccountHolderServiceImpl implements AccountHolderService {
 
     @Autowired
     private TransferRepository transferRepository;
+
+    @Autowired
+    private TransferOwnRepository transferOwnRepository;
     public Set<Account> findMyAccountsByAccountHolderId(Long id) {
         AccountHolder accountHolder = accountHolderRepository.findById(id)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -52,23 +57,23 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                 "You are not allowed to access or use this account. Invalid account ID");
     }
 
-    public void sendMoney(Long accountId, long id, TransferSendMoneyDTO transferSendMoneyDTO) {
+    public void sendMoney(Long accountId, long id, TransferSendMoneyAccountHolderDTO transferSendMoneyAccountHolderDTO) {
         Account accountSender = findMyAccountByAccountId(accountId, id);
         String nameSender = accountHolderRepository.findById(id).get().getName();
-        Account accountReceiver = accountRepository.findById(transferSendMoneyDTO.getAccountReceiverId())
+        Account accountReceiver = accountRepository.findById(transferSendMoneyAccountHolderDTO.getAccountReceiverId())
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "Account Receiver not found. Invalid account ID"));
 
-        Transfer transfer;
+        TransferOwn transfer;
         if(accountReceiver.getSecondaryOwner()!= null){
-            if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())
-                    || accountReceiver.getSecondaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())) {
-                Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()));
+            if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyAccountHolderDTO.getNameReceiver())
+                    || accountReceiver.getSecondaryOwner().getName().equals(transferSendMoneyAccountHolderDTO.getNameReceiver())) {
+                Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyAccountHolderDTO.getAmountMoney()));
                 accountSender.setBalance(newBalanceSender);
-                Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyAccountHolderDTO.getAmountMoney()));
                 accountReceiver.setBalance(newBalanceReceiver);
-                transfer = new Transfer(accountSender, accountReceiver, transferSendMoneyDTO.getAmountMoney(),
-                        nameSender,transferSendMoneyDTO.getNameReceiver());
+                transfer = new TransferOwn(accountReceiver, transferSendMoneyAccountHolderDTO.getNameReceiver(), transferSendMoneyAccountHolderDTO.getAmountMoney(),
+                        accountSender, nameSender);
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Transfer receiver's name is invalid." +
@@ -76,14 +81,13 @@ public class AccountHolderServiceImpl implements AccountHolderService {
             }
         }
         else{
-            if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())) {
-                Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()));
+            if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyAccountHolderDTO.getNameReceiver())) {
+                Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyAccountHolderDTO.getAmountMoney()));
                 accountSender.setBalance(newBalanceSender);
-                Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyAccountHolderDTO.getAmountMoney()));
                 accountReceiver.setBalance(newBalanceReceiver);
-                //System.out.println(accountReceiver.getBalance()+ "-------- posterior recibidor");
-                transfer = new Transfer(accountSender, accountReceiver, transferSendMoneyDTO.getAmountMoney(),
-                        nameSender, transferSendMoneyDTO.getNameReceiver());
+                transfer = new TransferOwn(accountReceiver, transferSendMoneyAccountHolderDTO.getNameReceiver(), transferSendMoneyAccountHolderDTO.getAmountMoney(),
+                        accountSender, nameSender);
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Transfer receiver's name is invalid." +
@@ -92,6 +96,7 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         }
         accountRepository.saveAll(List.of(accountReceiver, accountReceiver));
         transferRepository.save(transfer);
+        transferOwnRepository.save(transfer);
 
     }
 
@@ -102,6 +107,6 @@ public class AccountHolderServiceImpl implements AccountHolderService {
 
     public List<Transfer> findMyTransfersSenderByAccountId(Long accountId, long id) {
         Account myAccount = findMyAccountByAccountId(accountId, id);
-        return transferRepository.findByAccountSenderAccountId(id);
+        return transferOwnRepository.findByAccountSender(myAccount);
     }
 }
