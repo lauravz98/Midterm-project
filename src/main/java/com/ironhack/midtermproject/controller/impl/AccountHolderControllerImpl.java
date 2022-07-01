@@ -1,5 +1,6 @@
 package com.ironhack.midtermproject.controller.impl;
 
+import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyDTO;
 import com.ironhack.midtermproject.controller.interfaces.AccountHolderController;
 import com.ironhack.midtermproject.models.Transfer;
@@ -33,6 +34,11 @@ public class AccountHolderControllerImpl implements AccountHolderController {
     @ResponseStatus(HttpStatus.OK)
     public Account findMyAccountByAccountId(@PathVariable Long accountId, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return accountHolderService.findMyAccountByAccountId(accountId, userDetails.getUser().getId());
+    }
+    @GetMapping("/myAccounts/{accountId}/balance")
+    @ResponseStatus(HttpStatus.OK)
+    public Money findMyBalanceByAccountId(@PathVariable Long accountId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return accountHolderService.findMyAccountByAccountId(accountId, userDetails.getUser().getId()).getBalance();
     }
 
     @PatchMapping("/myAccounts/{accountId}/transfer")

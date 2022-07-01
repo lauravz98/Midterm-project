@@ -8,7 +8,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+
+import static com.ironhack.midtermproject.utils.utils.convertToLocalDateViaInstant;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
@@ -113,6 +117,28 @@ public class Saving extends Account{
         } else {
             super.setBalance(balance);
         }
+    }
+
+    @Override
+    public Money getBalance() {
+        long years;
+        if(getLastConsult().equals(null)){
+            setLastConsult(LocalDate.now());
+            LocalDate localDateCreation = convertToLocalDateViaInstant(getCreationDate());
+            years = ChronoUnit.YEARS.between(localDateCreation, getLastConsult());
+
+        } else {
+            years = ChronoUnit.YEARS.between(getLastConsult(), LocalDate.now());
+        }
+
+        int yearsInt = Integer.valueOf((int) Math.floor(years));
+        BigDecimal compoundInterest = (getInterestRate().add(new BigDecimal(1))).pow(yearsInt);
+        BigDecimal newBalance = super.getBalance().getAmount().multiply(compoundInterest);
+
+        Money newBalanceMoney = new Money(newBalance);
+        setLastConsult(LocalDate.now());
+        setBalance(newBalance);
+        return newBalanceMoney;
     }
 
     public Money getMIN_MINIMUM_BALANCE() {

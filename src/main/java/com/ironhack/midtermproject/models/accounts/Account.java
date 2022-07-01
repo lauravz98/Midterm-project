@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -59,45 +60,9 @@ public abstract class Account {
 
     @Enumerated(EnumType.STRING)
     private TypeAccountEnum typeAccount;
+    private LocalDate lastConsult;
 
-    public Account() {
-    }
-/*
-    public Account(AccountHolder primaryOwner, TypeAccountEnum typeAccount, String secretKey) {
-        this.primaryOwner = primaryOwner;
-        this.typeAccount = typeAccount;
-        this.secondaryOwner = null;
-        this.statusAccount = StatusAccountEnum.ACTIVE;
-        this.creationDate = getDateNow();
-        this.secretKey = secretKey;
-    }
-
-    public Account(AccountHolder primaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey) {
-        this.primaryOwner = primaryOwner;
-        this.typeAccount = typeAccount;
-        this.secondaryOwner = null;
-        this.statusAccount = StatusAccountEnum.ACTIVE;
-        this.creationDate = creationDate;
-        this.secretKey = secretKey;
-    }
-
-    public Account(AccountHolder primaryOwner, AccountHolder secondaryOwner,TypeAccountEnum typeAccount, String secretKey) {
-        this.primaryOwner = primaryOwner;
-        this.typeAccount = typeAccount;
-        this.secondaryOwner = secondaryOwner;
-        this.statusAccount = StatusAccountEnum.ACTIVE;
-        this.creationDate = getDateNow();
-        this.secretKey = secretKey;
-    }
-
-    public Account(AccountHolder primaryOwner, AccountHolder secondaryOwner, TypeAccountEnum typeAccount, Date creationDate, String secretKey) {
-        this.primaryOwner = primaryOwner;
-        this.typeAccount = typeAccount;
-        this.secondaryOwner = secondaryOwner;
-        this.statusAccount = StatusAccountEnum.ACTIVE;
-        this.creationDate = creationDate;
-        this.secretKey = secretKey;
-    }*/
+    public Account() { }
 
     protected Account(AccountHolder primaryOwner, String secretKey) {
         this.primaryOwner = primaryOwner;
@@ -105,6 +70,7 @@ public abstract class Account {
         this.statusAccount = StatusAccountEnum.ACTIVE;
         this.creationDate = getDateNow();
         this.secretKey = secretKey;
+        this.lastConsult = null;
     }
 
     protected Account(AccountHolder primaryOwner, AccountHolder secondaryOwner, Date creationDate, String secretKey, Money balance) {
@@ -114,6 +80,7 @@ public abstract class Account {
         setCreationDate(creationDate);
         this.secretKey = secretKey;
         setBalance(balance);
+        this.lastConsult = null;
     }
 
     public Long getAccountId() { return accountId; }
@@ -175,6 +142,30 @@ public abstract class Account {
 
     public String getSecretKey() { return secretKey; }
     public void setTypeAccount(TypeAccountEnum typeAccount) { this.typeAccount = typeAccount; }
+
+    public List<Transfer> getTransfersSender() {
+        return transfersSender;
+    }
+
+    public void setTransfersSender(List<Transfer> transfersSender) {
+        this.transfersSender = transfersSender;
+    }
+
+    public List<Transfer> getTransfersReceiver() {
+        return transfersReceiver;
+    }
+
+    public void setTransfersReceiver(List<Transfer> transfersReceiver) {
+        this.transfersReceiver = transfersReceiver;
+    }
+
+    public LocalDate getLastConsult() {
+        return lastConsult;
+    }
+
+    public void setLastConsult(LocalDate lastConsult) {
+        this.lastConsult = lastConsult;
+    }
 
     @Override
     public boolean equals(Object o) {

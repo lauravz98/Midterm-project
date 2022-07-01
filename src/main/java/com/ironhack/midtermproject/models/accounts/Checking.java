@@ -8,7 +8,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+
+import static com.ironhack.midtermproject.utils.utils.convertToLocalDateViaInstant;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
@@ -60,5 +64,27 @@ public class Checking extends Account{
         } else {
             super.setBalance(balance);
         }
+    }
+
+    @Override
+    public Money getBalance() {
+        long months;
+        if(getLastConsult().equals(null)){
+            setLastConsult(LocalDate.now());
+            LocalDate localDateCreation = convertToLocalDateViaInstant(getCreationDate());
+            months = ChronoUnit.MONTHS.between(localDateCreation, getLastConsult());
+
+        } else {
+            months = ChronoUnit.MONTHS.between(getLastConsult(), LocalDate.now());
+        }
+
+        int monthsInt = Integer.valueOf((int) Math.floor(months));
+        BigDecimal monthlyMaintenance = getMONTHLY_MAINTENANCE_FEE().getAmount().multiply(new BigDecimal(monthsInt));
+        BigDecimal newBalance = super.getBalance().getAmount().subtract(monthlyMaintenance);
+
+        Money newBalanceMoney = new Money(newBalance);
+        setLastConsult(LocalDate.now());
+        setBalance(newBalance);
+        return newBalanceMoney;
     }
 }

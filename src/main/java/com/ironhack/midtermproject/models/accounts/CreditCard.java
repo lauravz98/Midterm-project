@@ -8,7 +8,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+
+import static com.ironhack.midtermproject.utils.utils.convertToLocalDateViaInstant;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
@@ -99,6 +104,30 @@ public class CreditCard extends Account{
 
     }
 
+    @Override
+    public Money getBalance() {
+        long months;
+        if(getLastConsult().equals(null)){
+            setLastConsult(LocalDate.now());
+            LocalDate localDateCreation = convertToLocalDateViaInstant(getCreationDate());
+            months = ChronoUnit.MONTHS.between(localDateCreation, getLastConsult());
+
+        } else {
+            months = ChronoUnit.MONTHS.between(getLastConsult(), LocalDate.now());
+        }
+
+        int monthsInt = Integer.valueOf((int) Math.floor(months));
+        BigDecimal interestRateMonthly = getInterestRate().divide(new BigDecimal(12.0), 4, RoundingMode.HALF_UP);
+        // System.out.println(interestRateMonthly + " --------- interestRateMonthly");
+        BigDecimal compoundInterest = interestRateMonthly.add(new BigDecimal(1.0)).pow(monthsInt);
+        BigDecimal newBalance = super.getBalance().getAmount().multiply(compoundInterest);
+
+        Money newBalanceMoney = new Money(newBalance);
+        //System.out.println(newBalanceMoney+ " ----------------new balance money");
+        setLastConsult(LocalDate.now());
+        setBalance(newBalance);
+        return newBalanceMoney;
+    }
     public Money getMIN_CREDIT_LIMIT() {
         return MIN_CREDIT_LIMIT;
     }
