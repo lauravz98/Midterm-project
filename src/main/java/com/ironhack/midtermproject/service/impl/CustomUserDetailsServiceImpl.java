@@ -1,7 +1,7 @@
 package com.ironhack.midtermproject.service.impl;
 
 import com.ironhack.midtermproject.models.users.User;
-import com.ironhack.midtermproject.repository.UserRepository;
+import com.ironhack.midtermproject.repository.users.UserRepository;
 import com.ironhack.midtermproject.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

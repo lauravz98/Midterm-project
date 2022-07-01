@@ -1,10 +1,11 @@
 package com.ironhack.midtermproject.service.impl;
 
 import com.ironhack.midtermproject.classes.Money;
+import com.ironhack.midtermproject.controller.dto.CreditCardCreateDTO;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
 import com.ironhack.midtermproject.models.accounts.*;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
-import com.ironhack.midtermproject.repository.AdminRepository;
+import com.ironhack.midtermproject.repository.users.AdminRepository;
 import com.ironhack.midtermproject.service.interfaces.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,10 +60,11 @@ public class AdminServiceImpl implements AdminService {
                 savingAccount.getMinimumBalance(), savingAccount.getInterestRate());
         return accountRepository.save(account);
     }
-    public CreditCard createCreditCard(CreditCard creditCard) {
+    public CreditCard createCreditCard(CreditCardCreateDTO creditCard) {
         CreditCard account = new CreditCard(creditCard.getPrimaryOwner(), creditCard.getSecondaryOwner(),
                 creditCard.getCreationDate(), creditCard.getSecretKey(), creditCard.getBalance(),
                 creditCard.getCreditLimit(), creditCard.getInterestRate());
+
         return accountRepository.save(account);
     }
 

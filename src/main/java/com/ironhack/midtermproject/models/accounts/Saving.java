@@ -73,7 +73,7 @@ public class Saving extends Account{
         if(minimumBalance == null){
             this.minimumBalance = MIN_MINIMUM_BALANCE;
         } else {
-            if(minimumBalance.getAmount().compareTo(MIN_MINIMUM_BALANCE.getAmount()) != 1){
+            if(MIN_MINIMUM_BALANCE.getAmount().compareTo(minimumBalance.getAmount()) == 1){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
                         , "The minimum balance is lower than the established lower limit" + MIN_MINIMUM_BALANCE);
             } else if(minimumBalance.getAmount().compareTo(MAX_MINIMUM_BALANCE.getAmount()) != 1 ){
@@ -87,6 +87,9 @@ public class Saving extends Account{
     }
 
     public BigDecimal getInterestRate() {
+        if(interestRate == null){
+            this.interestRate = new BigDecimal(0.0025);
+        }
         return interestRate;
     }
 
@@ -110,7 +113,7 @@ public class Saving extends Account{
     @Override
     public void setBalance(Money balance) {
         if(balance.getAmount().compareTo(getMinimumBalance().getAmount()) != 1){
-            super.setBalance(getBalance().decreaseAmount(getPENALTY_FEE()));
+            super.setBalance(new Money(getBalance().decreaseAmount(getPENALTY_FEE())));
             System.out.println("A penalty of 40 USD will be applied because the balance is less than the minimum allowed. ");
             //throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
             //        "Balance is lower minimum allow: " + MINIMUM_BALANCE);
@@ -122,7 +125,7 @@ public class Saving extends Account{
     @Override
     public Money getBalance() {
         long years;
-        if(getLastConsult().equals(null)){
+        if(getLastConsult() == null){
             setLastConsult(LocalDate.now());
             LocalDate localDateCreation = convertToLocalDateViaInstant(getCreationDate());
             years = ChronoUnit.YEARS.between(localDateCreation, getLastConsult());
@@ -137,7 +140,7 @@ public class Saving extends Account{
 
         Money newBalanceMoney = new Money(newBalance);
         setLastConsult(LocalDate.now());
-        setBalance(newBalance);
+        setBalance(newBalanceMoney);
         return newBalanceMoney;
     }
 

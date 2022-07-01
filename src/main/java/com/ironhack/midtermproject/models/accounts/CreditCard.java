@@ -64,6 +64,9 @@ public class CreditCard extends Account{
     }
 
     public Money getCreditLimit() {
+        if(creditLimit == null){
+            this.creditLimit = MIN_CREDIT_LIMIT;
+        }
         return creditLimit;
     }
 
@@ -84,6 +87,9 @@ public class CreditCard extends Account{
     }
 
     public BigDecimal getInterestRate() {
+        if(interestRate == null){
+            this.interestRate = MAX_INTEREST_RATE;
+        }
         return interestRate;
     }
 
@@ -91,7 +97,7 @@ public class CreditCard extends Account{
         if(interestRate == null){
             this.interestRate = MAX_INTEREST_RATE;
         } else{
-            if(interestRate.compareTo(MIN_INTEREST_RATE) != 1){
+            if(getMIN_INTEREST_RATE().compareTo(interestRate) == 1){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY
                         , "Interest rate invalid. Interest rate is lower than the established lower limit" + MIN_INTEREST_RATE);
             } else if(interestRate.compareTo(MAX_INTEREST_RATE) != 1 ){
@@ -107,7 +113,7 @@ public class CreditCard extends Account{
     @Override
     public Money getBalance() {
         long months;
-        if(getLastConsult().equals(null)){
+        if(getLastConsult() == null){
             setLastConsult(LocalDate.now());
             LocalDate localDateCreation = convertToLocalDateViaInstant(getCreationDate());
             months = ChronoUnit.MONTHS.between(localDateCreation, getLastConsult());
@@ -118,14 +124,12 @@ public class CreditCard extends Account{
 
         int monthsInt = Integer.valueOf((int) Math.floor(months));
         BigDecimal interestRateMonthly = getInterestRate().divide(new BigDecimal(12.0), 4, RoundingMode.HALF_UP);
-        // System.out.println(interestRateMonthly + " --------- interestRateMonthly");
         BigDecimal compoundInterest = interestRateMonthly.add(new BigDecimal(1.0)).pow(monthsInt);
         BigDecimal newBalance = super.getBalance().getAmount().multiply(compoundInterest);
 
         Money newBalanceMoney = new Money(newBalance);
-        //System.out.println(newBalanceMoney+ " ----------------new balance money");
         setLastConsult(LocalDate.now());
-        setBalance(newBalance);
+        setBalance(newBalanceMoney);
         return newBalanceMoney;
     }
     public Money getMIN_CREDIT_LIMIT() {
@@ -137,10 +141,10 @@ public class CreditCard extends Account{
     }
 
     public BigDecimal getMIN_INTEREST_RATE() {
-        return MIN_INTEREST_RATE;
+        return MIN_INTEREST_RATE.setScale(4, RoundingMode.CEILING);
     }
 
     public BigDecimal getMAX_INTEREST_RATE() {
-        return MAX_INTEREST_RATE;
+        return MAX_INTEREST_RATE.setScale(4, RoundingMode.CEILING);
     }
 }

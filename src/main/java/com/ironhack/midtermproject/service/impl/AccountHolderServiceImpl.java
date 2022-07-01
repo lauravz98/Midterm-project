@@ -1,10 +1,11 @@
 package com.ironhack.midtermproject.service.impl;
 
+import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyDTO;
 import com.ironhack.midtermproject.models.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.users.AccountHolder;
-import com.ironhack.midtermproject.repository.AccountHolderRepository;
+import com.ironhack.midtermproject.repository.users.AccountHolderRepository;
 import com.ironhack.midtermproject.repository.TransferRepository;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
 import com.ironhack.midtermproject.service.interfaces.AccountHolderService;
@@ -62,8 +63,10 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         if(accountReceiver.getSecondaryOwner()!= null){
             if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())
                     || accountReceiver.getSecondaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())) {
-                accountSender.setBalance(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()));
-                accountReceiver.setBalance(accountSender.getBalance().increaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                accountSender.setBalance(newBalanceSender);
+                Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                accountReceiver.setBalance(newBalanceReceiver);
                 transfer = new Transfer(accountSender, accountReceiver, transferSendMoneyDTO.getAmountMoney(),
                         nameSender,transferSendMoneyDTO.getNameReceiver());
             } else {
@@ -74,9 +77,10 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         }
         else{
             if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyDTO.getNameReceiver())) {
-                //System.out.println(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()) + "---- new");
-                accountSender.setBalance(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()));
-                accountReceiver.setBalance(accountReceiver.getBalance().increaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                accountSender.setBalance(newBalanceSender);
+                Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyDTO.getAmountMoney()));
+                accountReceiver.setBalance(newBalanceReceiver);
                 //System.out.println(accountReceiver.getBalance()+ "-------- posterior recibidor");
                 transfer = new Transfer(accountSender, accountReceiver, transferSendMoneyDTO.getAmountMoney(),
                         nameSender, transferSendMoneyDTO.getNameReceiver());

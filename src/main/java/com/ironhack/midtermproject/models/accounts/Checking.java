@@ -57,7 +57,7 @@ public class Checking extends Account{
     @Override
     public void setBalance(Money balance) {
         if(balance.getAmount().compareTo(getMINIMUM_BALANCE().getAmount()) != 1){
-            super.setBalance(getBalance().decreaseAmount(getPENALTY_FEE()));
+            super.setBalance(new Money(getBalance().decreaseAmount(getPENALTY_FEE())));
             System.out.println("A penalty of 40 USD will be applied because the balance is less than the minimum allowed. ");
             //throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
             //        "Balance is lower minimum allow: " + MINIMUM_BALANCE);
@@ -69,7 +69,7 @@ public class Checking extends Account{
     @Override
     public Money getBalance() {
         long months;
-        if(getLastConsult().equals(null)){
+        if(getLastConsult() == null){
             setLastConsult(LocalDate.now());
             LocalDate localDateCreation = convertToLocalDateViaInstant(getCreationDate());
             months = ChronoUnit.MONTHS.between(localDateCreation, getLastConsult());
@@ -84,7 +84,7 @@ public class Checking extends Account{
 
         Money newBalanceMoney = new Money(newBalance);
         setLastConsult(LocalDate.now());
-        setBalance(newBalance);
+        setBalance(newBalanceMoney);
         return newBalanceMoney;
     }
 }

@@ -89,7 +89,12 @@ public abstract class Account {
     public AccountHolder getSecondaryOwner() { return secondaryOwner; }
     public Money getPENALTY_FEE() { return PENALTY_FEE; }
     public StatusAccountEnum getStatusAccount() { return statusAccount; }
-    public Date getCreationDate() { return creationDate; }
+    public Date getCreationDate() {
+        if(creationDate == null){
+            this.creationDate = getDateNow();
+        }
+        return creationDate;
+    }
     public TypeAccountEnum getTypeAccount() { return typeAccount; }
     public void setAccountId(Long accountId) { this.accountId = accountId; }
     public void setSecretKey(String secretKey) { this.secretKey = secretKey; }
@@ -99,7 +104,7 @@ public abstract class Account {
         if(balance == null){
             this.balance = new Money(zero);
         }else{
-            if(balance.getAmount().compareTo(zero) != 1){
+            if(zero.compareTo(balance.getAmount()) == 1){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
                         "This action cannot be processed because the balance would be less than the minimum allowed (0 USD). " +
                                 "Balance negative. Action unprocessable");
@@ -110,12 +115,12 @@ public abstract class Account {
         }
     }
 
+    /*
     public void setBalance(BigDecimal balanceBigDecimal) {
         BigDecimal zero = new BigDecimal(0);
         if(balanceBigDecimal == null){
             this.balance = new Money(zero);
         }else{
-            // System.out.println(balanceBigDecimal.compareTo(zero) + "-----    comparacio");
             if(balanceBigDecimal.compareTo(zero) != 1){
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
                         "This action cannot be processed because the balance would be less than the minimum allowed (0 USD). " +
@@ -125,7 +130,7 @@ public abstract class Account {
             }
 
         }
-    }
+    }*/
 
 
     public void setPrimaryOwner(AccountHolder primaryOwner) { this.primaryOwner = primaryOwner; }

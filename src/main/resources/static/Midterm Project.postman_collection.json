@@ -1,0 +1,609 @@
+{
+	"info": {
+		"_postman_id": "477b6dd3-edd9-4fe9-8ca1-b5d842f484ae",
+		"name": "Midterm Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin Get an account by accountId",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Get balance account by accountId",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/balance/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"balance",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Get by account Type",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/typeAccount/SAVINGS",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"typeAccount",
+						"SAVINGS"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Get by account Type Copy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/typeAccount/SAVINGS",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"typeAccount",
+						"SAVINGS"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin create checking account",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "aa",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{      \r\n    \"balance\": {\r\n        \"currency\": \"USD\",\r\n        \"amount\": 12345\r\n    },\r\n    \"primaryOwner\": {\r\n        \"id\": 3,\r\n        \"name\": \"Erasmus Crane\",\r\n        \"username\": \"Anjolie\",\r\n        \"password\": \"HJW82PMC3NP\",\r\n        \"userRole\": \"ACCOUNT_HOLDER\",\r\n        \"dateOfBirth\": \"1951-11-10T23:00:00.000+00:00\",\r\n        \"address\": {\r\n            \"streetName\": \"Ap #564-1999 Iaculis Ave\",\r\n            \"numberAddress\": 5,\r\n            \"city\": \"Alacant\",\r\n            \"country\": \"France\"\r\n        },\r\n        \"mailingAddress\": 41881\r\n    },\r\n    \"secretKey\": \"12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/checking",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"checking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin create saving account",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{      \r\n    \"balance\": {\r\n        \"currency\": \"USD\",\r\n        \"amount\": 9000\r\n    },\r\n    \"primaryOwner\": {\r\n        \"id\": 5,\r\n        \"name\": \"Erasmus Crane\",\r\n        \"username\": \"Anjolie\",\r\n        \"password\": \"HJW82PMC3NP\",\r\n        \"userRole\": \"ACCOUNT_HOLDER\",\r\n        \"dateOfBirth\": \"1951-11-10T23:00:00.000+00:00\",\r\n        \"address\": {\r\n            \"streetName\": \"Ap #564-1999 Iaculis Ave\",\r\n            \"numberAddress\": 5,\r\n            \"city\": \"Alacant\",\r\n            \"country\": \"France\"\r\n        }\r\n        \r\n    },\r\n    \"secretKey\": \"YNQ23PAD6PT\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/saving",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"saving"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin create credit card",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"secretKey\": \"YNQ23PAD6PT\",\r\n    \"balance\": {\r\n        \"currency\": \"USD\",\r\n        \"amount\": 1010.15\r\n    },\r\n    \"primaryOwner\": {\r\n        \"id\": 2,\r\n        \"name\": \"Vanna Maynard\",\r\n        \"username\": \"Rigel\",\r\n        \"password\": \"DMH98HOI7SM\",\r\n        \"userRole\": \"ACCOUNT_HOLDER\",\r\n        \"dateOfBirth\": \"1979-08-13T00:00:00.000+00:00\",\r\n        \"address\": {\r\n            \"streetName\": \"Enim. Avenue\",\r\n            \"numberAddress\": 3,\r\n            \"city\": \"Cáceres\",\r\n            \"country\": \"France\"\r\n        },\r\n        \"mailingAddress\": 57660\r\n    },\r\n    \"creditLimit\": {\r\n        \"currency\": \"USD\",\r\n        \"amount\": 1234.00\r\n    },\r\n    \"interestRate\": 0.1000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/creditCard",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"creditCard"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin delete an account by accountId",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/accounts/22",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin updateBalance",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "aa",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"balance\": {\r\n            \"currency\": \"USD\",\r\n            \"amount\": 1000\r\n        }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/accounts/2/balance",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"2",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User get my accounts",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "aa",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/myAccounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"myAccounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User get one account by account Id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "aa",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/myAccounts/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"myAccounts",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User get balance account by account Id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "aa",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/myAccounts/7/balance",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"myAccounts",
+						"7",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User get transfers sender by account",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "aa",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/myAccounts/1/transfers/sender",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"myAccounts",
+						"1",
+						"transfers",
+						"sender"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User get transfers receiver by account",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "Gage",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "aa",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/myAccounts/2/transfers/receiver",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"myAccounts",
+						"2",
+						"transfers",
+						"receiver"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User send money",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "aa",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountReceiverId\": 3,\r\n    \"amountMoney\": {\r\n            \"currency\": \"USD\",\r\n            \"amount\": 100\r\n        },\r\n        \"nameReceiver\": \"Erasmus Crane\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/myAccounts/1/transfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"myAccounts",
+						"1",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
