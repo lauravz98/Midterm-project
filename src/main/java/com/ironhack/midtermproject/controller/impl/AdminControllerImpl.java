@@ -9,7 +9,7 @@ import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.accounts.Checking;
 import com.ironhack.midtermproject.models.accounts.Saving;
-import com.ironhack.midtermproject.repository.TransferRepository;
+import com.ironhack.midtermproject.repository.transfers.TransferRepository;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
 import com.ironhack.midtermproject.service.interfaces.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,7 @@
 package com.ironhack.midtermproject.controller.impl;
 
 import com.ironhack.midtermproject.classes.Money;
+import com.ironhack.midtermproject.controller.dto.TransferReceiveMoneyThirdPartyDTO;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyAccountHolderDTO;
 import com.ironhack.midtermproject.controller.interfaces.AccountHolderController;
 import com.ironhack.midtermproject.models.transfers.Transfer;
@@ -57,6 +58,12 @@ public class AccountHolderControllerImpl implements AccountHolderController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void sendMoneyAccountHolder(@PathVariable Long accountId, @AuthenticationPrincipal CustomUserDetails userDetails,
                                        @RequestBody @Valid TransferSendMoneyAccountHolderDTO transferSendMoneyAccountHolderDTO) {
-        accountHolderService.sendMoney(accountId, userDetails.getUser().getId(), transferSendMoneyAccountHolderDTO);
+        accountHolderService.sendMoneyAccountHolder(accountId, userDetails.getUser().getId(), transferSendMoneyAccountHolderDTO);
+    }
+    @PatchMapping("/myAccounts/{accountId}/transfer/thirdParty")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void sendMoneyThirdParty(@PathVariable Long accountId, @AuthenticationPrincipal CustomUserDetails userDetails,
+                                    @RequestBody TransferReceiveMoneyThirdPartyDTO transferReceiveMoneyThirdPartyDTO) {
+        accountHolderService.sendMoneyThirdParty(accountId, userDetails.getUser().getId(), transferReceiveMoneyThirdPartyDTO);
     }
 }

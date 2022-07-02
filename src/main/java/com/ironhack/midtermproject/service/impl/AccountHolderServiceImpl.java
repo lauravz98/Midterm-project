@@ -1,14 +1,20 @@
 package com.ironhack.midtermproject.service.impl;
 
 import com.ironhack.midtermproject.classes.Money;
+import com.ironhack.midtermproject.controller.dto.TransferReceiveMoneyThirdPartyDTO;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyAccountHolderDTO;
 import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.transfers.TransferOwn;
+import com.ironhack.midtermproject.models.transfers.TransferThirdPartyReceive;
 import com.ironhack.midtermproject.models.users.AccountHolder;
-import com.ironhack.midtermproject.repository.TransferOwnRepository;
+import com.ironhack.midtermproject.models.users.ThirdParty;
+import com.ironhack.midtermproject.repository.transfers.TransferThirdPartyReceiveRepository;
+import com.ironhack.midtermproject.repository.transfers.TransferThirdPartySendRepository;
+import com.ironhack.midtermproject.repository.users.ThirdPartyRepository;
+import com.ironhack.midtermproject.repository.transfers.TransferOwnRepository;
 import com.ironhack.midtermproject.repository.users.AccountHolderRepository;
-import com.ironhack.midtermproject.repository.TransferRepository;
+import com.ironhack.midtermproject.repository.transfers.TransferRepository;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
 import com.ironhack.midtermproject.service.interfaces.AccountHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +25,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Service
 public class AccountHolderServiceImpl implements AccountHolderService {
 
@@ -33,6 +42,14 @@ public class AccountHolderServiceImpl implements AccountHolderService {
 
     @Autowired
     private TransferOwnRepository transferOwnRepository;
+
+    @Autowired
+    private TransferThirdPartyReceiveRepository transferThirdPartyReceiveRepository;
+    @Autowired
+    private TransferThirdPartySendRepository transferThirdPartySendRepository;
+
+    @Autowired
+    private ThirdPartyRepository thirdPartyRepository;
     public Set<Account> findMyAccountsByAccountHolderId(Long id) {
         AccountHolder accountHolder = accountHolderRepository.findById(id)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -57,7 +74,7 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                 "You are not allowed to access or use this account. Invalid account ID");
     }
 
-    public void sendMoney(Long accountId, long id, TransferSendMoneyAccountHolderDTO transferSendMoneyAccountHolderDTO) {
+    public void sendMoneyAccountHolder(Long accountId, long id, TransferSendMoneyAccountHolderDTO transferSendMoneyAccountHolderDTO) {
         Account accountSender = findMyAccountByAccountId(accountId, id);
         String nameSender = accountHolderRepository.findById(id).get().getName();
         Account accountReceiver = accountRepository.findById(transferSendMoneyAccountHolderDTO.getAccountReceiverId())
@@ -100,13 +117,43 @@ public class AccountHolderServiceImpl implements AccountHolderService {
 
     }
 
+    public void sendMoneyThirdParty(Long accountId, long id, TransferReceiveMoneyThirdPartyDTO transferReceiveMoneyThirdPartyDTO) {
+        Account accountSender = findMyAccountByAccountId(accountId, id);
+        String nameSender = accountHolderRepository.findById(id).get().getName();
+        ThirdParty thirdParty = thirdPartyRepository.findById(transferReceiveMoneyThirdPartyDTO.getIdThirdParty())
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "ThirdParty not found. Invalid thirdParty ID"));
+        TransferThirdPartyReceive transfer;
+        // System.out.println(thirdParty.getHashKey() + " ---- en DB");
+        // System.out.println(transferReceiveMoneyThirdPartyDTO.getHashKey() + " ---- en DTO");
+        if(thirdParty.getHashKey().equals(transferReceiveMoneyThirdPartyDTO.getHashKey())){
+            Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferReceiveMoneyThirdPartyDTO.getAmountMoney()));
+            accountSender.setBalance(newBalanceSender);
+            transfer = new TransferThirdPartyReceive(accountSender, nameSender,
+                    transferReceiveMoneyThirdPartyDTO.getAmountMoney(), transferReceiveMoneyThirdPartyDTO.getHashKey());
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "HashKey's receiver is invalid." +
+                            "The hashKey provided doesn't match the owner of the thirdParty id given.");
+        }
+        accountRepository.save(accountSender);
+        transferRepository.save(transfer);
+        transferThirdPartyReceiveRepository.save(transfer);
+    }
+
     public List<Transfer> findMyTransfersReceiverByAccountId(Long accountId, long id) {
         Account myAccount = findMyAccountByAccountId(accountId, id);
-        return transferRepository.findByAccountReceiver(myAccount);
+        List<Transfer> transfersOwn = transferOwnRepository.findByAccountReceiverOwn(myAccount);
+        List<Transfer> transfersThird = transferThirdPartySendRepository.findByAccountReceiverThird(myAccount);
+        List<Transfer> allTransferReceiver = Stream.concat(transfersOwn.stream(), transfersThird.stream()).collect(Collectors.toList());
+        return allTransferReceiver;
     }
 
     public List<Transfer> findMyTransfersSenderByAccountId(Long accountId, long id) {
         Account myAccount = findMyAccountByAccountId(accountId, id);
-        return transferOwnRepository.findByAccountSender(myAccount);
+        List<Transfer> transfersOwn = transferOwnRepository.findByAccountSenderOwn(myAccount);
+        List<Transfer> transfersThird = transferThirdPartyReceiveRepository.findByAccountSenderThird(myAccount);
+        List<Transfer> allTransferSender = Stream.concat(transfersOwn.stream(), transfersThird.stream()).collect(Collectors.toList());
+        return allTransferSender;
     }
 }

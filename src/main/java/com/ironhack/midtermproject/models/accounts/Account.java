@@ -3,8 +3,9 @@ package com.ironhack.midtermproject.models.accounts;
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.enums.StatusAccountEnum;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
-import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.transfers.TransferOwn;
+import com.ironhack.midtermproject.models.transfers.TransferThirdPartyReceive;
+import com.ironhack.midtermproject.models.transfers.TransferThirdPartySend;
 import com.ironhack.midtermproject.models.users.AccountHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -42,11 +43,18 @@ public abstract class Account {
     @JoinColumn(name = "id_secondary_owner")
     private AccountHolder secondaryOwner;
 
-    @OneToMany(mappedBy = "accountSender")
-    private List<TransferOwn> transfersSender;
+    @OneToMany(mappedBy = "accountSenderOwn")
+    private List<TransferOwn> transfersOwnSender;
 
-    @OneToMany(mappedBy = "accountReceiver")
-    private List<Transfer> transfersReceiver;
+    @OneToMany(mappedBy = "accountReceiverOwn")
+    private List<TransferOwn> transfersOwnReceiver;
+
+    @OneToMany(mappedBy = "accountSenderThird")
+    private List<TransferThirdPartyReceive> transferThirdPartyReceives;
+
+    @OneToMany(mappedBy = "accountReceiverThird")
+    private List<TransferThirdPartySend> transferThirdPartySends;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "amount_penalty_fee")),

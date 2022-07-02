@@ -1,4 +1,4 @@
-package com.ironhack.midtermproject.repository;
+package com.ironhack.midtermproject.repository.transfers;
 
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.transfers.Transfer;
@@ -10,5 +10,7 @@ import java.util.List;
 
 @Repository
 public interface TransferOwnRepository extends JpaRepository<TransferOwn, Long> {
-    List<Transfer> findByAccountSender(Account myAccount);
+    List<Transfer> findByAccountSenderOwn(Account myAccount);
+    //List<Transfer> findByAccountSenderAccountId(Long accountSenderId);
+    List<Transfer> findByAccountReceiverOwn(Account accountReceiver);
 }

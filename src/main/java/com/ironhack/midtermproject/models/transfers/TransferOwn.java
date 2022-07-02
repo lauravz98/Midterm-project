@@ -11,21 +11,29 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @PrimaryKeyJoinColumn(name = "id")
 public class TransferOwn extends Transfer{
     @ManyToOne
+    @JoinColumn(name = "account_receiver_id")
+    private Account accountReceiverOwn;
+    private String nameReceiver;
+    @ManyToOne
     @JoinColumn(name = "account_sender_id")
-    private Account accountSender;
+    private Account accountSenderOwn;
 
     private String nameSender;
 
     public TransferOwn() {
     }
 
-    public TransferOwn(Account accountReceiver, String nameReceiver, Money amount, Account accountSender, String nameSender) {
-        super(accountReceiver, nameReceiver, amount);
-        this.accountSender = accountSender;
+    public TransferOwn(Account accountReceiverOwn, String nameReceiver, Money amount, Account accountSenderOwn, String nameSender) {
+        super(amount);
+        this.accountReceiverOwn = accountReceiverOwn;
+        this.nameReceiver = nameReceiver;
+        this.accountSenderOwn = accountSenderOwn;
         this.nameSender = nameSender;
     }
 
-
+    public Long getAccountReceiverOwn() {
+        return accountReceiverOwn.getAccountId();
+    }
     public String getNameSender() {
         return nameSender;
     }
@@ -33,8 +41,15 @@ public class TransferOwn extends Transfer{
     public void setNameSender(String nameSender) {
         this.nameSender = nameSender;
     }
-    public Long getAccountSender() {
-        return accountSender.getAccountId();
+    public Long getAccountSenderOwn() {
+        return accountSenderOwn.getAccountId();
+    }
+    public String getNameReceiver() {
+        return nameReceiver;
+    }
+
+    public void setNameReceiver(String nameReceiver) {
+        this.nameReceiver = nameReceiver;
     }
 
 

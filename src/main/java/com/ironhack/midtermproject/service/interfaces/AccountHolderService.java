@@ -1,5 +1,6 @@
 package com.ironhack.midtermproject.service.interfaces;
 
+import com.ironhack.midtermproject.controller.dto.TransferReceiveMoneyThirdPartyDTO;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyAccountHolderDTO;
 import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
@@ -12,8 +13,10 @@ public interface AccountHolderService {
 
     Account findMyAccountByAccountId(Long accountId, long id);
 
-    void sendMoney(Long accountId, long id, TransferSendMoneyAccountHolderDTO transferSendMoneyAccountHolderDTO);
+    void sendMoneyAccountHolder(Long accountId, long id, TransferSendMoneyAccountHolderDTO transferSendMoneyAccountHolderDTO);
+    void sendMoneyThirdParty(Long accountId, long id, TransferReceiveMoneyThirdPartyDTO transferReceiveMoneyThirdPartyDTO);
 
     List<Transfer> findMyTransfersReceiverByAccountId(Long accountId, long id);
     List<Transfer> findMyTransfersSenderByAccountId(Long accountId, long id);
-}
+
+  }
