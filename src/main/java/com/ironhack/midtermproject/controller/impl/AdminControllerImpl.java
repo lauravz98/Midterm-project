@@ -37,7 +37,7 @@ public class AdminControllerImpl implements AdminController {
 
     @GetMapping("/accounts")
     @ResponseStatus(HttpStatus.OK)
-    public List<Account> findAll() {
+    public List<Account> findAllAccounts() {
         return accountRepository.findAll();
     }
     @GetMapping("/accounts/{accountId}")
@@ -64,34 +64,34 @@ public class AdminControllerImpl implements AdminController {
 
     @PostMapping("/accounts/checking") // Created checking account
     @ResponseStatus(HttpStatus.CREATED)
-    public Account store(@RequestBody @Valid Checking checkingAccount){
+    public Account createNewAccount(@RequestBody @Valid Checking checkingAccount){
         return adminService.createCheckingAccount(checkingAccount);
     }
     @PostMapping("/accounts/saving") // Created saving
     @ResponseStatus(HttpStatus.CREATED)
-    public Account store(@RequestBody @Valid Saving savingAccount){
+    public Account createNewAccount(@RequestBody @Valid Saving savingAccount){
         return adminService.createSavingAccount(savingAccount);
     }
     @PostMapping("/accounts/creditCard")
     @ResponseStatus(HttpStatus.CREATED)
-    public Account store(@RequestBody @Valid CreditCardCreateDTO creditCard) {
+    public Account createNewAccount(@RequestBody @Valid CreditCardCreateDTO creditCard) {
         return adminService.createCreditCard(creditCard);
     }
     @PostMapping("/thirdParty/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ThirdParty store(@RequestBody @Valid ThirdParty thirdParty) {
+    public ThirdParty createThirdParty(@RequestBody @Valid ThirdParty thirdParty) {
         return adminService.createThirdParty(thirdParty);
     }
 
     @PatchMapping("/accounts/{accountId}/balance")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateBalance(@PathVariable Long accountId, @RequestBody @Valid AccountBalanceDTO accountBalanceDTO) {
+    public void updateBalanceByAccountId(@PathVariable Long accountId, @RequestBody @Valid AccountBalanceDTO accountBalanceDTO) {
         adminService.updateBalance(accountId, accountBalanceDTO.getBalance());
     }
 
     @DeleteMapping("/accounts/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long accountId) {
+    public void deleteAccount(@PathVariable Long accountId) {
         adminService.delete(accountId);
     }
 }

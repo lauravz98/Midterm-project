@@ -1,6 +1,6 @@
 package com.ironhack.midtermproject.models.users;
 
-import com.ironhack.midtermproject.enums.UserRole;
+import com.ironhack.midtermproject.enums.UserRoleEnum;
 
 import javax.persistence.*;
 
@@ -16,21 +16,21 @@ public class User {
 
     private String password;
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    private UserRoleEnum userRoleEnum;
 
     public User() {
     }
     protected User(String name, String password) {
         this.name = name;
         this.password = password;
-        this.userRole = null;
+        this.userRoleEnum = null;
         this.username = createUsername(name, id);
 
     }
-    public User(String name, String password, UserRole userRole) {
+    public User(String name, String password, UserRoleEnum userRoleEnum) {
         this.name = name;
         this.password = password;
-        this.userRole = userRole;
+        this.userRoleEnum = userRoleEnum;
         this.username = createUsername(name, id);
     }
 
@@ -58,12 +58,12 @@ public class User {
         this.password = password;
     }
 
-    public UserRole getUserRole() {
-        return userRole;
+    public UserRoleEnum getUserRole() {
+        return userRoleEnum;
     }
 
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
+    public void setUserRole(UserRoleEnum userRoleEnum) {
+        this.userRoleEnum = userRoleEnum;
     }
 
     public String getUsername() {

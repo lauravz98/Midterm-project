@@ -188,6 +188,7 @@ CREATE TABLE transfer_third_party_send (
   id BIGINT NOT NULL,
   hash_key VARCHAR(255),
   account_receiver_id BIGINT,
+  name_receiver VARCHAR(255),
   secret_key VARCHAR(255),
   PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES transfer(id),

@@ -1,5 +1,5 @@
 package com.ironhack.midtermproject.enums;
 
-public enum UserRole {
+public enum UserRoleEnum {
     ACCOUNT_HOLDER, ADMIN
 }

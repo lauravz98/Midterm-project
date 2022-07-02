@@ -15,22 +15,22 @@ import java.util.List;
 public interface AdminController {
 
     // Get
-    List<Account> findAll();
+    List<Account> findAllAccounts();
     Account findAccountById(Long accountId);
     Money getBalanceByAccountId(Long accountId);
     List<Account> findByTypeAccount(TypeAccountEnum typeAccount);
     List<Transfer> findAllTransfer();
 
     // Post
-    Account store(Checking checkingAccount);
-    Account store(Saving savingAccount);
-    Account store(CreditCardCreateDTO creditCard);
+    Account createNewAccount(Checking checkingAccount);
+    Account createNewAccount(Saving savingAccount);
+    Account createNewAccount(CreditCardCreateDTO creditCard);
 
-    ThirdParty store(ThirdParty thirdParty);
+    ThirdParty createThirdParty(ThirdParty thirdParty);
 
     // Patch
-    void updateBalance(Long accountId, AccountBalanceDTO accountBalanceDTO);
+    void updateBalanceByAccountId(Long accountId, AccountBalanceDTO accountBalanceDTO);
 
     // Delete
-    void delete(Long accountId);
+    void deleteAccount(Long accountId);
 }
