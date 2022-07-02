@@ -2,7 +2,7 @@ package com.ironhack.midtermproject.controller.impl;
 
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyToAHFromThirdPartyDTO;
 import com.ironhack.midtermproject.controller.dto.TransferThirdPartyGetMoneyFromAHDTO;
-import com.ironhack.midtermproject.controller.interfaces.users.ThirdPartyController;
+import com.ironhack.midtermproject.controller.interfaces.ThirdPartyController;
 import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.service.interfaces.ThirdPartyService;
 import org.springframework.beans.factory.annotation.Autowired;

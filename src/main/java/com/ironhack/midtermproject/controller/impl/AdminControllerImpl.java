@@ -3,7 +3,7 @@ package com.ironhack.midtermproject.controller.impl;
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.AccountBalanceDTO;
 import com.ironhack.midtermproject.controller.dto.CreditCardCreateDTO;
-import com.ironhack.midtermproject.controller.interfaces.users.AdminController;
+import com.ironhack.midtermproject.controller.interfaces.AdminController;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
 import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;

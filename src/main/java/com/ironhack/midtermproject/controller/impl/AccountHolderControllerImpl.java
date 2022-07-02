@@ -3,7 +3,7 @@ package com.ironhack.midtermproject.controller.impl;
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyToThirdPartyFromAHDTO;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyToAccountHolderFromAHDTO;
-import com.ironhack.midtermproject.controller.interfaces.users.AccountHolderController;
+import com.ironhack.midtermproject.controller.interfaces.AccountHolderController;
 import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
