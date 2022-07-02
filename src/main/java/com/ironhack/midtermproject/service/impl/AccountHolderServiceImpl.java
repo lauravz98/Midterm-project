@@ -1,8 +1,8 @@
 package com.ironhack.midtermproject.service.impl;
 
 import com.ironhack.midtermproject.classes.Money;
-import com.ironhack.midtermproject.controller.dto.TransferReceiveMoneyThirdPartyDTO;
-import com.ironhack.midtermproject.controller.dto.TransferSendMoneyAccountHolderDTO;
+import com.ironhack.midtermproject.controller.dto.TransferSendMoneyToThirdPartyFromAHDTO;
+import com.ironhack.midtermproject.controller.dto.TransferSendMoneyToAccountHolderFromAHDTO;
 import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.transfers.TransferOwn;
@@ -74,22 +74,22 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                 "You are not allowed to access or use this account. Invalid account ID");
     }
 
-    public void sendMoneyAccountHolder(Long accountId, long id, TransferSendMoneyAccountHolderDTO transferSendMoneyAccountHolderDTO) {
+    public void sendMoneyAccountHolder(Long accountId, long id, TransferSendMoneyToAccountHolderFromAHDTO transferSendMoneyToAccountHolderFromAHDTO) {
         Account accountSender = findMyAccountByAccountId(accountId, id);
         String nameSender = accountHolderRepository.findById(id).get().getName();
-        Account accountReceiver = accountRepository.findById(transferSendMoneyAccountHolderDTO.getAccountReceiverId())
+        Account accountReceiver = accountRepository.findById(transferSendMoneyToAccountHolderFromAHDTO.getAccountReceiverId())
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "Account Receiver not found. Invalid account ID"));
 
         TransferOwn transfer;
         if(accountReceiver.getSecondaryOwner()!= null){
-            if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyAccountHolderDTO.getNameReceiver())
-                    || accountReceiver.getSecondaryOwner().getName().equals(transferSendMoneyAccountHolderDTO.getNameReceiver())) {
-                Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyAccountHolderDTO.getAmountMoney()));
+            if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyToAccountHolderFromAHDTO.getNameReceiver())
+                    || accountReceiver.getSecondaryOwner().getName().equals(transferSendMoneyToAccountHolderFromAHDTO.getNameReceiver())) {
+                Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyToAccountHolderFromAHDTO.getAmountMoney()));
                 accountSender.setBalance(newBalanceSender);
-                Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyAccountHolderDTO.getAmountMoney()));
+                Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyToAccountHolderFromAHDTO.getAmountMoney()));
                 accountReceiver.setBalance(newBalanceReceiver);
-                transfer = new TransferOwn(accountReceiver, transferSendMoneyAccountHolderDTO.getNameReceiver(), transferSendMoneyAccountHolderDTO.getAmountMoney(),
+                transfer = new TransferOwn(accountReceiver, transferSendMoneyToAccountHolderFromAHDTO.getNameReceiver(), transferSendMoneyToAccountHolderFromAHDTO.getAmountMoney(),
                         accountSender, nameSender);
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -98,12 +98,12 @@ public class AccountHolderServiceImpl implements AccountHolderService {
             }
         }
         else{
-            if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyAccountHolderDTO.getNameReceiver())) {
-                Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyAccountHolderDTO.getAmountMoney()));
+            if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyToAccountHolderFromAHDTO.getNameReceiver())) {
+                Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyToAccountHolderFromAHDTO.getAmountMoney()));
                 accountSender.setBalance(newBalanceSender);
-                Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyAccountHolderDTO.getAmountMoney()));
+                Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyToAccountHolderFromAHDTO.getAmountMoney()));
                 accountReceiver.setBalance(newBalanceReceiver);
-                transfer = new TransferOwn(accountReceiver, transferSendMoneyAccountHolderDTO.getNameReceiver(), transferSendMoneyAccountHolderDTO.getAmountMoney(),
+                transfer = new TransferOwn(accountReceiver, transferSendMoneyToAccountHolderFromAHDTO.getNameReceiver(), transferSendMoneyToAccountHolderFromAHDTO.getAmountMoney(),
                         accountSender, nameSender);
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -117,20 +117,20 @@ public class AccountHolderServiceImpl implements AccountHolderService {
 
     }
 
-    public void sendMoneyThirdParty(Long accountId, long id, TransferReceiveMoneyThirdPartyDTO transferReceiveMoneyThirdPartyDTO) {
+    public void sendMoneyThirdParty(Long accountId, long id, TransferSendMoneyToThirdPartyFromAHDTO transferSendMoneyToThirdPartyFromAHDTO) {
         Account accountSender = findMyAccountByAccountId(accountId, id);
         String nameSender = accountHolderRepository.findById(id).get().getName();
-        ThirdParty thirdParty = thirdPartyRepository.findById(transferReceiveMoneyThirdPartyDTO.getIdThirdParty())
+        ThirdParty thirdParty = thirdPartyRepository.findById(transferSendMoneyToThirdPartyFromAHDTO.getIdThirdParty())
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "ThirdParty not found. Invalid thirdParty ID"));
         TransferThirdPartyReceive transfer;
         // System.out.println(thirdParty.getHashKey() + " ---- en DB");
         // System.out.println(transferReceiveMoneyThirdPartyDTO.getHashKey() + " ---- en DTO");
-        if(thirdParty.getHashKey().equals(transferReceiveMoneyThirdPartyDTO.getHashKey())){
-            Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferReceiveMoneyThirdPartyDTO.getAmountMoney()));
+        if(thirdParty.getHashKey().equals(transferSendMoneyToThirdPartyFromAHDTO.getHashKey())){
+            Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyToThirdPartyFromAHDTO.getAmountMoney()));
             accountSender.setBalance(newBalanceSender);
             transfer = new TransferThirdPartyReceive(accountSender, nameSender,
-                    transferReceiveMoneyThirdPartyDTO.getAmountMoney(), transferReceiveMoneyThirdPartyDTO.getHashKey());
+                    transferSendMoneyToThirdPartyFromAHDTO.getAmountMoney(), transferSendMoneyToThirdPartyFromAHDTO.getHashKey());
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "HashKey's receiver is invalid." +

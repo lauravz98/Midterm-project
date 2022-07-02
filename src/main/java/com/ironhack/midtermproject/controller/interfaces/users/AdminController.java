@@ -1,4 +1,4 @@
-package com.ironhack.midtermproject.controller.interfaces;
+package com.ironhack.midtermproject.controller.interfaces.users;
 
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.AccountBalanceDTO;

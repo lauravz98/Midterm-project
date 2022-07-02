@@ -2,7 +2,7 @@ package com.ironhack.midtermproject.controller.dto;
 
 import com.ironhack.midtermproject.classes.Money;
 
-public class TransferReceiveMoneyThirdPartyDTO {
+public class TransferSendMoneyToThirdPartyFromAHDTO {
     private Long idThirdParty;
     private Money amountMoney;
     private String hashKey;

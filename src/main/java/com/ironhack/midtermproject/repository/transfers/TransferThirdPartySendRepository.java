@@ -12,4 +12,6 @@ import java.util.List;
 @Repository
 public interface TransferThirdPartySendRepository extends JpaRepository<TransferThirdPartySend, Long> {
     List<Transfer> findByAccountReceiverThird(Account accountReceiver);
+
+    List<Transfer> findByHashKey(String hashKey);
 }

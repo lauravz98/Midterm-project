@@ -14,20 +14,29 @@ public class TransferThirdPartySend extends Transfer{
     @ManyToOne
     @JoinColumn(name = "account_receiver_id")
     private Account accountReceiverThird;
-
-    private String hashKey;
+    private String nameReceiver;
     private String secretKey;
+    private String hashKey;
+
 
     public TransferThirdPartySend() {
     }
 
-    public TransferThirdPartySend(Account accountReceiverThird, Money amount, String hashKey, String secretKey) {
+    public TransferThirdPartySend(Account accountReceiverThird, Money amount, String hashKey, String nameReceiver, String secretKey) {
         super(amount);
         this.accountReceiverThird = accountReceiverThird;
         this.hashKey = hashKey;
         this.secretKey = secretKey;
+        this.nameReceiver = nameReceiver;
     }
 
+    public String getNameReceiver() {
+        return nameReceiver;
+    }
+
+    public void setNameReceiver(String nameReceiver) {
+        this.nameReceiver = nameReceiver;
+    }
 
     public String getHashKey() {
         return hashKey;

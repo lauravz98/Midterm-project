@@ -1,9 +1,9 @@
 package com.ironhack.midtermproject.controller.impl;
 
 import com.ironhack.midtermproject.classes.Money;
-import com.ironhack.midtermproject.controller.dto.TransferReceiveMoneyThirdPartyDTO;
-import com.ironhack.midtermproject.controller.dto.TransferSendMoneyAccountHolderDTO;
-import com.ironhack.midtermproject.controller.interfaces.AccountHolderController;
+import com.ironhack.midtermproject.controller.dto.TransferSendMoneyToThirdPartyFromAHDTO;
+import com.ironhack.midtermproject.controller.dto.TransferSendMoneyToAccountHolderFromAHDTO;
+import com.ironhack.midtermproject.controller.interfaces.users.AccountHolderController;
 import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
@@ -57,13 +57,13 @@ public class AccountHolderControllerImpl implements AccountHolderController {
     @PatchMapping("/myAccounts/{accountId}/transfer/accountHolder")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void sendMoneyAccountHolder(@PathVariable Long accountId, @AuthenticationPrincipal CustomUserDetails userDetails,
-                                       @RequestBody @Valid TransferSendMoneyAccountHolderDTO transferSendMoneyAccountHolderDTO) {
-        accountHolderService.sendMoneyAccountHolder(accountId, userDetails.getUser().getId(), transferSendMoneyAccountHolderDTO);
+                                       @RequestBody @Valid TransferSendMoneyToAccountHolderFromAHDTO transferSendMoneyToAccountHolderFromAHDTO) {
+        accountHolderService.sendMoneyAccountHolder(accountId, userDetails.getUser().getId(), transferSendMoneyToAccountHolderFromAHDTO);
     }
     @PatchMapping("/myAccounts/{accountId}/transfer/thirdParty")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void sendMoneyThirdParty(@PathVariable Long accountId, @AuthenticationPrincipal CustomUserDetails userDetails,
-                                    @RequestBody TransferReceiveMoneyThirdPartyDTO transferReceiveMoneyThirdPartyDTO) {
-        accountHolderService.sendMoneyThirdParty(accountId, userDetails.getUser().getId(), transferReceiveMoneyThirdPartyDTO);
+                                    @RequestBody TransferSendMoneyToThirdPartyFromAHDTO transferSendMoneyToThirdPartyFromAHDTO) {
+        accountHolderService.sendMoneyThirdParty(accountId, userDetails.getUser().getId(), transferSendMoneyToThirdPartyFromAHDTO);
     }
 }
