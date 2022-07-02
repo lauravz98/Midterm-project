@@ -7,6 +7,7 @@ import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.accounts.Checking;
 import com.ironhack.midtermproject.models.accounts.CreditCard;
 import com.ironhack.midtermproject.models.accounts.Saving;
+import com.ironhack.midtermproject.models.users.ThirdParty;
 
 import java.util.List;
 
@@ -16,8 +17,9 @@ public interface AdminService {
     Account createCheckingAccount(Checking checkingAccount);
     Saving createSavingAccount(Saving savingAccount);
     CreditCard createCreditCard(CreditCardCreateDTO creditCard);
-
+    ThirdParty createThirdParty(ThirdParty thirdParty);
     void updateBalance(Long accountId, Money balance);
     void delete(Long accountId);
+
 
 }

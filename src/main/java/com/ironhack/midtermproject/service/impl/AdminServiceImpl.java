@@ -4,8 +4,10 @@ import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.CreditCardCreateDTO;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
 import com.ironhack.midtermproject.models.accounts.*;
+import com.ironhack.midtermproject.models.users.ThirdParty;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
 import com.ironhack.midtermproject.repository.users.AdminRepository;
+import com.ironhack.midtermproject.repository.users.ThirdPartyRepository;
 import com.ironhack.midtermproject.service.interfaces.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private ThirdPartyRepository thirdPartyRepository;
 
     public Account findAccountById(Long accountId) {
         Account account = accountRepository.findById(accountId)
@@ -66,6 +71,11 @@ public class AdminServiceImpl implements AdminService {
                 creditCard.getCreditLimit(), creditCard.getInterestRate());
 
         return accountRepository.save(account);
+    }
+
+    public ThirdParty createThirdParty(ThirdParty thirdParty) {
+        ThirdParty thirdPartyCreate = new ThirdParty(thirdParty.getHashKey());
+        return thirdPartyRepository.save(thirdPartyCreate);
     }
 
     public void updateBalance(Long accountId, Money balance) {

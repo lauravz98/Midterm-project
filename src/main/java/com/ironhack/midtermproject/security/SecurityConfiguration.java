@@ -22,8 +22,11 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.GET, "/accounts/**").hasRole("ADMIN") // Solo ADMIN
                 .antMatchers(HttpMethod.POST, "/accounts/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PATCH, "/accounts/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PATCH, "/thirdParty/create").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/accounts/**").hasRole("ADMIN")
-                .anyRequest().permitAll(); // Others endpoints son public
+                .antMatchers(HttpMethod.GET, "/thirdParty/**").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/thirdParty/**").permitAll();
+                //.anyRequest().permitAll(); // Others endpoints son public
         return http.build();
     }
 

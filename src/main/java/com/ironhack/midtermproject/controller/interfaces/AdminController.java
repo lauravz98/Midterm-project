@@ -8,6 +8,7 @@ import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.accounts.Checking;
 import com.ironhack.midtermproject.models.accounts.Saving;
+import com.ironhack.midtermproject.models.users.ThirdParty;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface AdminController {
     // Get
     List<Account> findAll();
     Account findAccountById(Long accountId);
-    Money getBalance(Long accountId);
+    Money getBalanceByAccountId(Long accountId);
     List<Account> findByTypeAccount(TypeAccountEnum typeAccount);
     List<Transfer> findAllTransfer();
 
@@ -24,6 +25,8 @@ public interface AdminController {
     Account store(Checking checkingAccount);
     Account store(Saving savingAccount);
     Account store(CreditCardCreateDTO creditCard);
+
+    ThirdParty store(ThirdParty thirdParty);
 
     // Patch
     void updateBalance(Long accountId, AccountBalanceDTO accountBalanceDTO);

@@ -9,9 +9,12 @@ import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.accounts.Checking;
 import com.ironhack.midtermproject.models.accounts.Saving;
+import com.ironhack.midtermproject.models.users.ThirdParty;
 import com.ironhack.midtermproject.repository.transfers.TransferRepository;
 import com.ironhack.midtermproject.repository.accounts.AccountRepository;
+import com.ironhack.midtermproject.repository.users.ThirdPartyRepository;
 import com.ironhack.midtermproject.service.interfaces.AdminService;
+import com.ironhack.midtermproject.service.interfaces.ThirdPartyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +34,7 @@ public class AdminControllerImpl implements AdminController {
     @Autowired
     private TransferRepository transferRepository;
 
+
     @GetMapping("/accounts")
     @ResponseStatus(HttpStatus.OK)
     public List<Account> findAll() {
@@ -43,7 +47,7 @@ public class AdminControllerImpl implements AdminController {
     }
     @GetMapping("/accounts/balance/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    public Money getBalance(@PathVariable Long accountId) {
+    public Money getBalanceByAccountId(@PathVariable Long accountId) {
         Account account = adminService.findAccountById(accountId);
         return account.getBalance();
     }
@@ -68,10 +72,15 @@ public class AdminControllerImpl implements AdminController {
     public Account store(@RequestBody @Valid Saving savingAccount){
         return adminService.createSavingAccount(savingAccount);
     }
-    @PostMapping("/accounts/creditCard") // Created saving
+    @PostMapping("/accounts/creditCard")
     @ResponseStatus(HttpStatus.CREATED)
     public Account store(@RequestBody @Valid CreditCardCreateDTO creditCard) {
         return adminService.createCreditCard(creditCard);
+    }
+    @PostMapping("/thirdParty/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ThirdParty store(@RequestBody @Valid ThirdParty thirdParty) {
+        return adminService.createThirdParty(thirdParty);
     }
 
     @PatchMapping("/accounts/{accountId}/balance")
