@@ -13,4 +13,8 @@ public interface TransferOwnRepository extends JpaRepository<TransferOwn, Long> 
     List<Transfer> findByAccountSenderOwn(Account myAccount);
     //List<Transfer> findByAccountSenderAccountId(Long accountSenderId);
     List<Transfer> findByAccountReceiverOwn(Account accountReceiver);
+
+
+    List<Transfer> findByAccountSenderOwnOrderByTimeTransferDesc(Account myAccount);
+    List<Transfer> findByAccountReceiverOwnOrderByTimeTransferDesc(Account myAccount);
 }

@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class TransferOwn extends Transfer{
@@ -23,8 +26,8 @@ public class TransferOwn extends Transfer{
     public TransferOwn() {
     }
 
-    public TransferOwn(Account accountReceiverOwn, String nameReceiver, Money amount, Account accountSenderOwn, String nameSender) {
-        super(amount);
+    public TransferOwn(Account accountReceiverOwn, String nameReceiver, Money amount, Account accountSenderOwn, String nameSender, LocalDateTime timeTransfer) {
+        super(amount, timeTransfer);
         this.accountReceiverOwn = accountReceiverOwn;
         this.nameReceiver = nameReceiver;
         this.accountSenderOwn = accountSenderOwn;

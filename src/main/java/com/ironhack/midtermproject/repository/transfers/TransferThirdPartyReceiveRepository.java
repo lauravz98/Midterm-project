@@ -13,5 +13,7 @@ public interface TransferThirdPartyReceiveRepository extends JpaRepository<Trans
     List<Transfer> findByAccountSenderThird(Account myAccount);
 
     List<Transfer> findByHashKey(String hashKey);
+
+    List<Transfer> findByAccountSenderThirdOrderByTimeTransferDesc(Account account);
     //List<Transfer> findByAccountReceiver(Account accountReceiver);
 }

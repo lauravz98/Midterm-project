@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
@@ -20,8 +22,8 @@ public class TransferThirdPartyReceive extends Transfer{
     public TransferThirdPartyReceive() {
     }
 
-    public TransferThirdPartyReceive(Account accountSenderThird, String nameSender, Money amount, String hashKey) {
-        super(amount);
+    public TransferThirdPartyReceive(Account accountSenderThird, String nameSender, Money amount, String hashKey, LocalDateTime timeTransfer) {
+        super(amount, timeTransfer);
         this.accountSenderThird = accountSenderThird;
         this.nameSender = nameSender;
         this.hashKey = hashKey;

@@ -3,6 +3,7 @@ package com.ironhack.midtermproject.service.impl;
 import com.ironhack.midtermproject.classes.Money;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyToThirdPartyFromAHDTO;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyToAccountHolderFromAHDTO;
+import com.ironhack.midtermproject.enums.StatusAccountEnum;
 import com.ironhack.midtermproject.models.transfers.Transfer;
 import com.ironhack.midtermproject.models.accounts.Account;
 import com.ironhack.midtermproject.models.transfers.TransferOwn;
@@ -22,6 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,6 +77,7 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                 "You are not allowed to access or use this account. Invalid account ID");
     }
 
+
     public void sendMoneyAccountHolder(Long accountId, long id, TransferSendMoneyToAccountHolderFromAHDTO transferSendMoneyToAccountHolderFromAHDTO) {
         Account accountSender = findMyAccountByAccountId(accountId, id);
         String nameSender = accountHolderRepository.findById(id).get().getName();
@@ -81,6 +85,18 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "Account Receiver not found. Invalid account ID"));
 
+        if(accountSender.getStatusAccount().equals(StatusAccountEnum.FROZEN ) || accountReceiver.getStatusAccount().equals(StatusAccountEnum.FROZEN) ){
+            System.out.println("Status's account sending: "+accountSender.getStatusAccount());
+            System.out.println("Status's account receiving: "+accountReceiver.getStatusAccount());
+            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,
+                    "Transaction not allowed account blocked");
+
+        }
+        if(isFraudForManyRequestsSenderOwn(accountSender) || isFraudForManyRequestsSenderThird(accountSender)|| isFraudForManyRequestsReceiver(accountReceiver) ||
+                isFraudForAbnormalAmounts(accountSender, transferSendMoneyToAccountHolderFromAHDTO.getAmountMoney())){
+            throw new ResponseStatusException(HttpStatus.LOCKED,
+                    "The account has been blocked due to detection of attempted fraud.");
+        }
         TransferOwn transfer;
         if(accountReceiver.getSecondaryOwner()!= null){
             if(accountReceiver.getPrimaryOwner().getName().equals(transferSendMoneyToAccountHolderFromAHDTO.getNameReceiver())
@@ -90,7 +106,7 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                 Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyToAccountHolderFromAHDTO.getAmountMoney()));
                 accountReceiver.setBalance(newBalanceReceiver);
                 transfer = new TransferOwn(accountReceiver, transferSendMoneyToAccountHolderFromAHDTO.getNameReceiver(), transferSendMoneyToAccountHolderFromAHDTO.getAmountMoney(),
-                        accountSender, nameSender);
+                        accountSender, nameSender, LocalDateTime.now());
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Transfer receiver's name is invalid." +
@@ -104,7 +120,7 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                 Money newBalanceReceiver = new Money(accountReceiver.getBalance().increaseAmount(transferSendMoneyToAccountHolderFromAHDTO.getAmountMoney()));
                 accountReceiver.setBalance(newBalanceReceiver);
                 transfer = new TransferOwn(accountReceiver, transferSendMoneyToAccountHolderFromAHDTO.getNameReceiver(), transferSendMoneyToAccountHolderFromAHDTO.getAmountMoney(),
-                        accountSender, nameSender);
+                        accountSender, nameSender, LocalDateTime.now());
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Transfer receiver's name is invalid." +
@@ -123,6 +139,15 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         ThirdParty thirdParty = thirdPartyRepository.findById(transferSendMoneyToThirdPartyFromAHDTO.getIdThirdParty())
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "ThirdParty not found. Invalid thirdParty ID"));
+
+        if(accountSender.getStatusAccount().equals(StatusAccountEnum.FROZEN )){
+            System.out.println("Status's account sending: "+accountSender.getStatusAccount());
+            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Transaction not allowed account blocked");
+        }
+        if(isFraudForManyRequestsSenderOwn(accountSender) || isFraudForManyRequestsSenderThird(accountSender) || isFraudForAbnormalAmounts(accountSender, transferSendMoneyToThirdPartyFromAHDTO.getAmountMoney())){
+            throw new ResponseStatusException(HttpStatus.LOCKED,
+                    "The account has been blocked due to detection of attempted fraud.");
+        }
         TransferThirdPartyReceive transfer;
         // System.out.println(thirdParty.getHashKey() + " ---- en DB");
         // System.out.println(transferReceiveMoneyThirdPartyDTO.getHashKey() + " ---- en DTO");
@@ -130,7 +155,7 @@ public class AccountHolderServiceImpl implements AccountHolderService {
             Money newBalanceSender = new Money(accountSender.getBalance().decreaseAmount(transferSendMoneyToThirdPartyFromAHDTO.getAmountMoney()));
             accountSender.setBalance(newBalanceSender);
             transfer = new TransferThirdPartyReceive(accountSender, nameSender,
-                    transferSendMoneyToThirdPartyFromAHDTO.getAmountMoney(), transferSendMoneyToThirdPartyFromAHDTO.getHashKey());
+                    transferSendMoneyToThirdPartyFromAHDTO.getAmountMoney(), transferSendMoneyToThirdPartyFromAHDTO.getHashKey(), LocalDateTime.now());
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "HashKey's receiver is invalid." +
@@ -155,5 +180,50 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         List<Transfer> transfersThird = transferThirdPartyReceiveRepository.findByAccountSenderThird(myAccount);
         List<Transfer> allTransferSender = Stream.concat(transfersOwn.stream(), transfersThird.stream()).collect(Collectors.toList());
         return allTransferSender;
+    }
+
+    public boolean isFraudForManyRequestsSenderOwn(Account account){
+        List<Transfer> transferList = transferOwnRepository.findByAccountSenderOwnOrderByTimeTransferDesc(account);
+        if(transferList.size() == 0){ return false; }
+        long seconds = ChronoUnit.SECONDS.between(transferList.get(0).getTimeTransfer(), LocalDateTime.now());
+        if(seconds <= 1.0) {
+            account.setStatusAccount(StatusAccountEnum.FROZEN);
+            accountRepository.save(account);
+            System.out.println("The account "+account.getAccountId()+" has been cogelated for attempted fraud. " +
+                    "Reason: too many transfers sent in less than a second.");
+            return true;
+        }
+        return false;
+    }
+    public boolean isFraudForManyRequestsSenderThird(Account account){
+        List<Transfer> transferList = transferThirdPartyReceiveRepository.findByAccountSenderThirdOrderByTimeTransferDesc(account);
+        if(transferList.size() == 0){ return false; }
+        long seconds = ChronoUnit.SECONDS.between(transferList.get(0).getTimeTransfer(), LocalDateTime.now());
+        // System.out.println("seconds: "+seconds);
+        if(seconds <= 1.0) {
+            account.setStatusAccount(StatusAccountEnum.FROZEN);
+            accountRepository.save(account);
+            System.out.println("The account "+account.getAccountId()+" has been cogelated for attempted fraud. " +
+                    "Reason: too many transfers sent in less than a second.");
+            return true;
+        }
+        return false;
+    }
+    public boolean isFraudForManyRequestsReceiver(Account account){
+        List<Transfer> transferList = transferOwnRepository.findByAccountReceiverOwnOrderByTimeTransferDesc(account);
+        if(transferList.size() == 0){ return false; }
+        long seconds = ChronoUnit.SECONDS.between(transferList.get(0).getTimeTransfer(), LocalDateTime.now());
+        if(seconds <= 1.0) {
+            account.setStatusAccount(StatusAccountEnum.FROZEN);
+            System.out.println("The account "+account.getAccountId()+" has been cogelated for attempted fraud. " +
+                    "Reason: too many transfers received in less than a second.");
+            accountRepository.save(account);
+            return true;
+        }
+        return false;
+        //return (seconds <= 1.0) ? true: false; // operador ternario, forma cool if-else
+    }
+    public boolean isFraudForAbnormalAmounts(Account account, Money amount){
+        return false;
     }
 }

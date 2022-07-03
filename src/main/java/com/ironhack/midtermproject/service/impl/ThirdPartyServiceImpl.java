@@ -19,7 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.ironhack.midtermproject.utils.utils.getDateNow;
 
 @Service
 public class ThirdPartyServiceImpl implements ThirdPartyService {
@@ -72,7 +75,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 accountReceiver.setBalance(newBalanceReceiver);
 
                 transfer = new TransferThirdPartySend(accountReceiver, transferSendMoneyToAHFromThirdPartyDTO.getAmountMoney(), hashKey,
-                        transferSendMoneyToAHFromThirdPartyDTO.getNameReceiver(), transferSendMoneyToAHFromThirdPartyDTO.getSecretKey());
+                        transferSendMoneyToAHFromThirdPartyDTO.getNameReceiver(), transferSendMoneyToAHFromThirdPartyDTO.getSecretKey(), LocalDateTime.now());
             } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "SecretKey is invalid. The secret key provided doesn't match with the account given.");
@@ -98,7 +101,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 accountSender.setBalance(newBalanceReceiver);
 
                 transfer = new TransferThirdPartyReceive(accountSender, transferThirdPartyGetMoneyFromAHDTO.getNamePrimaryOwner(),
-                        transferThirdPartyGetMoneyFromAHDTO.getAmountMoney(), hashKey);
+                        transferThirdPartyGetMoneyFromAHDTO.getAmountMoney(), hashKey, LocalDateTime.now());
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "SecretKey is invalid. The secret key provided doesn't match with the account given.");
