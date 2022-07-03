@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.util.Base64;
 import java.util.Date;
 
 public class utils {
@@ -22,12 +22,18 @@ public class utils {
         return today;
     }
 
-    public static String PasswordEncodeUtil (String originalPassword){
+    public static String passwordEncodeUtil(String originalPassword){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String passwordEncode = passwordEncoder.encode(originalPassword);
         System.out.println(passwordEncode);
         return passwordEncode;
 
+    }
+
+    public static String encoderBase64(String user, String password){
+        String originalInput = user +":"+password;
+        String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
+        return "Basic "+encodedString;
     }
 
 }

@@ -5,10 +5,17 @@ import com.ironhack.midtermproject.classes.Money;
 public class TransferSendMoneyToAccountHolderFromAHDTO {
 
     private Long accountReceiverId;
-
+    private String nameReceiver;
     private Money amountMoney;
 
-    private String nameReceiver;
+    public TransferSendMoneyToAccountHolderFromAHDTO() {
+    }
+
+    public TransferSendMoneyToAccountHolderFromAHDTO(Long accountReceiverId, String nameReceiver, Money amountMoney) {
+        this.accountReceiverId = accountReceiverId;
+        this.nameReceiver = nameReceiver;
+        this.amountMoney = amountMoney;
+    }
 
     public Long getAccountReceiverId() {
         return accountReceiverId;

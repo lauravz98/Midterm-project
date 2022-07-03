@@ -7,6 +7,15 @@ public class TransferSendMoneyToThirdPartyFromAHDTO {
     private Money amountMoney;
     private String hashKey;
 
+    public TransferSendMoneyToThirdPartyFromAHDTO(Long idThirdParty, Money amountMoney, String hashKey) {
+        this.idThirdParty = idThirdParty;
+        this.amountMoney = amountMoney;
+        this.hashKey = hashKey;
+    }
+
+    public TransferSendMoneyToThirdPartyFromAHDTO() {
+    }
+
     public Long getIdThirdParty() {
         return idThirdParty;
     }

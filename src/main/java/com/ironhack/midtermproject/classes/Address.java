@@ -10,6 +10,16 @@ public class Address {
     private String city;
     private String country;
 
+    public Address() {
+    }
+
+    public Address(String streetName, int numberAddress, String city, String country) {
+        this.streetName = streetName;
+        this.numberAddress = numberAddress;
+        this.city = city;
+        this.country = country;
+    }
+
     public String getStreetName() {
         return streetName;
     }

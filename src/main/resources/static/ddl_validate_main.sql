@@ -7,11 +7,11 @@ CREATE TABLE user (
   id BIGINT NOT NULL AUTO_INCREMENT,
   name VARCHAR(255),
   password VARCHAR(255),
-  user_role VARCHAR(255),
+  user_role_enum VARCHAR(255),
   username VARCHAR(255),
   PRIMARY KEY (id));
   
-INSERT INTO user (name, password, user_role, username)
+INSERT INTO user (name, password, user_role_enum, username)
 VALUES
   ("Vanna Maynard",	"$2a$10$s1f6Ja1Em0waIDjWVitydO5Ndm4qghXlV96fi67sa8gCIpcQuey0u", "ACCOUNT_HOLDER",	"user1"), -- aa
   ("Ruth Hogan",	"$2a$10$s1f6Ja1Em0waIDjWVitydO5Ndm4qghXlV96fi67sa8gCIpcQuey0u", "ACCOUNT_HOLDER",	"Gage"), -- aa
@@ -85,7 +85,7 @@ VALUES
   (40,"USD", 10007.76, 	"USD", "2012-06-28", "DNV32ZPK1VE", "ACTIVE", "CREDIT_CARD",		"2019-01-26", 4, NULL),
   (40,"USD", 19025.52, 	"USD", "2011-11-24", "MIL79CSO1KC", "ACTIVE", "SAVINGS",			"2015-01-26", 5, NULL),
   (40,"USD", 9937.97, 	"USD", "2012-10-12", "VON85OHM1LC", "ACTIVE", "CHECKING",			"2016-01-26", 5, NULL);
--- SELECT * FROM account;
+  -- SELECT * FROM account;
 
 DROP TABLE IF EXISTS saving;
 CREATE TABLE saving (
@@ -167,8 +167,25 @@ CREATE TABLE transfer (
   id BIGINT NOT NULL AUTO_INCREMENT,
   amount DECIMAL(19,2),
   currency VARCHAR(255),
+  time_transfer DATETIME(6),
+  date_transfer DATE,
   PRIMARY KEY (id));
 SELECT * FROM transfer;
+
+INSERT INTO transfer(amount, currency, time_transfer, date_transfer)
+VALUES(10000,"USD", "2022-01-03 09:59:31.69", "2022-01-03"),
+	(20000,"USD", "2022-01-03 09:59:31.69", "2022-01-03"),
+	(5000,"USD", "2022-04-03 09:59:31.69", "2022-04-03");
+
+SELECT date_transfer, SUM(amount) AS total_day FROM transfer GROUP BY date_transfer;
+
+SELECT MAX(sum_per_day.total_day) FROM (SELECT date_transfer, SUM(amount) AS total_day FROM transfer GROUP BY date_transfer) AS sum_per_day;
+-- SELECT * FROM (SELECT SUM(amount) FROM transfer GROUP BY time_transfer;)
+-- WHERE time_transfer;
+
+-- SELECT AVG(count_table.id_column) FROM (SELECT a.id, COUNT(o.id) AS id_column FROM opportunity o
+-- JOIN account a ON a.id = o.account_id
+-- GROUP BY a.id) AS count_table;
 
 DROP TABLE IF EXISTS transfer_own;
 CREATE TABLE transfer_own (
