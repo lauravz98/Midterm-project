@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Transfer {
+public class Transfer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +25,6 @@ public abstract class Transfer {
     public Transfer(Money amount, LocalDateTime timeTransfer) {
         this.timeTransfer = timeTransfer;
         this.amount = amount;
-        this.dateTransfer = timeTransfer.toLocalDate();
     }
 
     public Long getId() {
@@ -52,4 +51,11 @@ public abstract class Transfer {
         this.amount = amount;
     }
 
+    public LocalDate getDateTransfer() {
+        return dateTransfer;
+    }
+
+    public void setDateTransfer(LocalDate dateTransfer) {
+        this.dateTransfer = dateTransfer;
+    }
 }

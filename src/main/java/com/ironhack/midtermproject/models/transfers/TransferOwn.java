@@ -26,12 +26,14 @@ public class TransferOwn extends Transfer{
     public TransferOwn() {
     }
 
-    public TransferOwn(Account accountReceiverOwn, String nameReceiver, Money amount, Account accountSenderOwn, String nameSender, LocalDateTime timeTransfer) {
+    public TransferOwn(Account accountReceiverOwn, String nameReceiver, Money amount, Account accountSenderOwn, String nameSender,
+                       LocalDateTime timeTransfer) {
         super(amount, timeTransfer);
         this.accountReceiverOwn = accountReceiverOwn;
         this.nameReceiver = nameReceiver;
         this.accountSenderOwn = accountSenderOwn;
         this.nameSender = nameSender;
+        setDateTransfer(timeTransfer.toLocalDate());
     }
 
     public Long getAccountReceiverOwn() {

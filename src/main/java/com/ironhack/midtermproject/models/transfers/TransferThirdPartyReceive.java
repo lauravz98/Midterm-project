@@ -27,6 +27,7 @@ public class TransferThirdPartyReceive extends Transfer{
         this.accountSenderThird = accountSenderThird;
         this.nameSender = nameSender;
         this.hashKey = hashKey;
+        setDateTransfer(timeTransfer.toLocalDate());
     }
 
     public Long getAccountSenderThird() {

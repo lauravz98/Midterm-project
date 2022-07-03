@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
@@ -203,7 +204,7 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         if(seconds <= 1.0) {
             account.setStatusAccount(StatusAccountEnum.FROZEN);
             accountRepository.save(account);
-            System.out.println("The account "+account.getAccountId()+" has been cogelated for attempted fraud. " +
+            System.out.println("The account "+account.getAccountId()+" has been frozen for attempted fraud. " +
                     "Reason: too many transfers sent in less than a second.");
             return true;
         }
@@ -215,7 +216,7 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         long seconds = ChronoUnit.SECONDS.between(transferList.get(0).getTimeTransfer(), LocalDateTime.now());
         if(seconds <= 1.0) {
             account.setStatusAccount(StatusAccountEnum.FROZEN);
-            System.out.println("The account "+account.getAccountId()+" has been cogelated for attempted fraud. " +
+            System.out.println("The account "+account.getAccountId()+" has been frozen for attempted fraud. " +
                     "Reason: too many transfers received in less than a second.");
             accountRepository.save(account);
             return true;
@@ -224,6 +225,15 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         //return (seconds <= 1.0) ? true: false; // operador ternario, forma cool if-else
     }
     public boolean isFraudForAbnormalAmounts(Account account, Money amount){
+        if(transferRepository.findAll().size() == 0){ return false; }
+        BigDecimal maxSumAmountDaily = new BigDecimal(transferRepository.findMaxDailyFromSumAmount()*1.5);
+        if(amount.getAmount().compareTo(maxSumAmountDaily) == 1){
+            account.setStatusAccount(StatusAccountEnum.FROZEN);
+            System.out.println("The account "+account.getAccountId()+" has been frozen for attempted fraud. " +
+                    "Reason: abnormal transfer amount.");
+            accountRepository.save(account);
+            return true;
+        }
         return false;
     }
 }

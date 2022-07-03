@@ -30,6 +30,7 @@ public class TransferThirdPartySend extends Transfer{
         this.hashKey = hashKey;
         this.secretKey = secretKey;
         this.nameReceiver = nameReceiver;
+        setDateTransfer(timeTransfer.toLocalDate());
     }
 
     public String getNameReceiver() {
