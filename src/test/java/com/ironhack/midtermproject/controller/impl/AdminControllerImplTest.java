@@ -3,6 +3,8 @@ package com.ironhack.midtermproject.controller.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.midtermproject.classes.Address;
 import com.ironhack.midtermproject.classes.Money;
+import com.ironhack.midtermproject.controller.dto.CreateAccountDTO;
+import com.ironhack.midtermproject.controller.dto.TransferSendMoneyToAccountHolderFromAHDTO;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
 import com.ironhack.midtermproject.models.accounts.*;
 import com.ironhack.midtermproject.models.users.AccountHolder;
@@ -29,11 +31,11 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
 
 import static com.ironhack.midtermproject.utils.utils.encoderBase64;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -97,10 +99,11 @@ class AdminControllerImplTest {
 
     @AfterEach
     void tearDown() {
-        thirdPartyRepository.deleteAll();
         adminRepository.deleteAll();
+        transferRepository.deleteAll();
         accountRepository.deleteAll();
         accountHolderRepository.deleteAll();
+        thirdPartyRepository.deleteAll();
     }
 
     @Test
@@ -194,7 +197,34 @@ class AdminControllerImplTest {
     }
 
     @Test
-    void findAllTransfer() {
+    void findAllTransfer() throws Exception {
+        HttpHeaders httpHeaders1 = new HttpHeaders();
+        httpHeaders1.add("Authorization", encoderBase64(accountHolder1.getUsername(), "aa"));
+
+        // Make a transfer
+        Money amountTransfer =  new Money(new BigDecimal(100));
+        TransferSendMoneyToAccountHolderFromAHDTO transferSendMoneyToAccountHolderFromAHDTO =
+                new TransferSendMoneyToAccountHolderFromAHDTO(account2.getAccountId(), account2.getPrimaryOwner().getName(), amountTransfer);
+        String body = objectMapper.writeValueAsString(transferSendMoneyToAccountHolderFromAHDTO);
+
+        MvcResult mvcResult1 = mockMvc.perform(patch("/myAccounts/"+account1.getAccountId()+"/transfer/accountHolder")
+                        .headers(httpHeaders1)
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+
+        // lookup transfers
+        HttpHeaders httpHeaders2 = new HttpHeaders();
+        httpHeaders2.add("Authorization", encoderBase64(admin1.getUsername(), "123"));
+
+        MvcResult mvcResult2 = mockMvc.perform(get("/accounts/transfers")
+                        .headers(httpHeaders2))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        assertTrue(mvcResult2.getResponse().getContentAsString().contains(account1.getPrimaryOwner().getName()));
     }
 
     @Test
@@ -202,7 +232,7 @@ class AdminControllerImplTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization", encoderBase64(admin1.getUsername(), "123"));
 
-        Saving newAccount = new Saving(accountHolder1, "123456", new Money(new BigDecimal(8910)));
+        CreateAccountDTO newAccount = new CreateAccountDTO(accountHolder1, "123456", new Money(new BigDecimal(8910)));
         String body = objectMapper.writeValueAsString(newAccount);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/saving")
@@ -213,18 +243,79 @@ class AdminControllerImplTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
-        assertTrue(mvcResult.getResponse().getContentAsString().contains(accountHolder1.getName()));
+
         assertTrue(mvcResult.getResponse().getContentAsString().contains("123456"));
         assertTrue(mvcResult.getResponse().getContentAsString().contains("8910"));
-
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(String.valueOf(accountHolder1.getId())));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(TypeAccountEnum.SAVINGS.toString()));
     }
 
     @Test
-    void createNewAccountChecking() {
+    void createNewAccountChecking_less24Years() throws Exception {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", encoderBase64(admin1.getUsername(), "123"));
+
+        CreateAccountDTO newAccount = new CreateAccountDTO(accountHolder1, "123456", new Money(new BigDecimal(8910)));
+        String body = objectMapper.writeValueAsString(newAccount);
+
+        MvcResult mvcResult = mockMvc.perform(post("/accounts/checking")
+                        .headers(httpHeaders)
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("123456"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("8910"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(String.valueOf(accountHolder1.getId())));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(TypeAccountEnum.STUDENT_CHECKING.toString()));
     }
 
     @Test
-    void createNewAccountCreditCard() {
+    void createNewAccountChecking_moreThan24Years() throws Exception {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", encoderBase64(admin1.getUsername(), "123"));
+
+        CreateAccountDTO newAccount = new CreateAccountDTO(accountHolder2, "123456", new Money(new BigDecimal(8910)));
+        String body = objectMapper.writeValueAsString(newAccount);
+
+        MvcResult mvcResult = mockMvc.perform(post("/accounts/checking")
+                        .headers(httpHeaders)
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("123456"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("8910"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(String.valueOf(accountHolder2.getId())));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(TypeAccountEnum.CHECKING.toString()));
+    }
+    @Test
+    void createNewAccountCreditCard() throws Exception {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", encoderBase64(admin1.getUsername(), "123"));
+
+        CreateAccountDTO newAccount = new CreateAccountDTO(accountHolder2, "123456", new Money(new BigDecimal(8910)));
+        String body = objectMapper.writeValueAsString(newAccount);
+
+        MvcResult mvcResult = mockMvc.perform(post("/accounts/creditCard")
+                        .headers(httpHeaders)
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("123456"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("8910"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(String.valueOf(accountHolder2.getId())));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains(TypeAccountEnum.CREDIT_CARD.toString()));
     }
 
     @Test
