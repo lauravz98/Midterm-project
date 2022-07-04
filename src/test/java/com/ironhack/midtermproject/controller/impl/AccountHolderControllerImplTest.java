@@ -102,10 +102,11 @@ class AccountHolderControllerImplTest {
 
     @AfterEach
     void tearDown() {
-        thirdPartyRepository.deleteAll();
         adminRepository.deleteAll();
+        transferRepository.deleteAll();
         accountRepository.deleteAll();
         accountHolderRepository.deleteAll();
+        thirdPartyRepository.deleteAll();
     }
 
     @Test
@@ -192,14 +193,33 @@ class AccountHolderControllerImplTest {
 
     @Test
     void findMyTransfersReceiverByAccountId() throws Exception {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", encoderBase64(accountHolder1.getUsername(), "aa"));
 
-        MvcResult mvcResult = mockMvc.perform(get("/myAccounts/"+account1.getAccountId()+"/transfers/receiver")
-                        .headers(httpHeaders))
+        HttpHeaders httpHeaders1 = new HttpHeaders();
+        httpHeaders1.add("Authorization", encoderBase64(accountHolder1.getUsername(), "aa"));
+
+        // Make a transfer
+        Money amountTransfer =  new Money(new BigDecimal(100));
+        TransferSendMoneyToAccountHolderFromAHDTO transferSendMoneyToAccountHolderFromAHDTO =
+                new TransferSendMoneyToAccountHolderFromAHDTO(account2.getAccountId(), account2.getPrimaryOwner().getName(), amountTransfer);
+        String body = objectMapper.writeValueAsString(transferSendMoneyToAccountHolderFromAHDTO);
+
+        MvcResult mvcResult1 = mockMvc.perform(patch("/myAccounts/"+account1.getAccountId()+"/transfer/accountHolder")
+                        .headers(httpHeaders1)
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+        // Account 2 receive
+        HttpHeaders httpHeaders2 = new HttpHeaders();
+        httpHeaders2.add("Authorization", encoderBase64(accountHolder2.getUsername(), "aa"));
+
+        MvcResult mvcResult2 = mockMvc.perform(get("/myAccounts/"+account2.getAccountId()+"/transfers/receiver")
+                        .headers(httpHeaders2))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
+        assertTrue(mvcResult2.getResponse().getContentAsString().contains(account1.getPrimaryOwner().getName()));
     }
 
     @Test
@@ -207,11 +227,27 @@ class AccountHolderControllerImplTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization", encoderBase64(accountHolder1.getUsername(), "aa"));
 
-        MvcResult mvcResult = mockMvc.perform(get("/myAccounts/"+account1.getAccountId()+"/transfers/sender")
+        // Make a transfer
+        Money amountTransfer =  new Money(new BigDecimal(100));
+        TransferSendMoneyToAccountHolderFromAHDTO transferSendMoneyToAccountHolderFromAHDTO =
+                new TransferSendMoneyToAccountHolderFromAHDTO(account2.getAccountId(), account2.getPrimaryOwner().getName(), amountTransfer);
+        String body = objectMapper.writeValueAsString(transferSendMoneyToAccountHolderFromAHDTO);
+
+        MvcResult mvcResult1 = mockMvc.perform(patch("/myAccounts/"+account1.getAccountId()+"/transfer/accountHolder")
+                        .headers(httpHeaders)
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+        // Query
+        MvcResult mvcResult2 = mockMvc.perform(get("/myAccounts/"+account1.getAccountId()+"/transfers/sender")
                         .headers(httpHeaders))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
+
+        assertTrue(mvcResult2.getResponse().getContentAsString().contains(account1.getPrimaryOwner().getName()));
     }
 
     @Test
