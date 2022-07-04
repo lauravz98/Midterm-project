@@ -3,6 +3,7 @@ package com.ironhack.midtermproject.controller.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.midtermproject.classes.Address;
 import com.ironhack.midtermproject.classes.Money;
+import com.ironhack.midtermproject.controller.dto.AccountBalanceDTO;
 import com.ironhack.midtermproject.controller.dto.CreateAccountDTO;
 import com.ironhack.midtermproject.controller.dto.TransferSendMoneyToAccountHolderFromAHDTO;
 import com.ironhack.midtermproject.enums.TypeAccountEnum;
@@ -319,14 +320,53 @@ class AdminControllerImplTest {
     }
 
     @Test
-    void createThirdParty() {
+    void createThirdParty() throws Exception {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", encoderBase64(admin1.getUsername(), "123"));
+
+        ThirdParty thirdParty = new ThirdParty("c6671408-ae94-4628-9b75-9a83ee936acd");
+        String body = objectMapper.writeValueAsString(thirdParty);
+
+        MvcResult mvcResult = mockMvc.perform(post("/thirdParty/create")
+                        .headers(httpHeaders)
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("c6671408-ae94-4628-9b75-9a83ee936acd"));
     }
 
     @Test
-    void updateBalanceByAccountId() {
+    void updateBalanceByAccountId() throws Exception {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", encoderBase64(admin1.getUsername(), "123"));
+
+        Money newBalance = new Money(new BigDecimal(1000));
+        AccountBalanceDTO accountBalanceDTO = new AccountBalanceDTO(newBalance);
+        String body = objectMapper.writeValueAsString(accountBalanceDTO);
+
+        MvcResult mvcResult = mockMvc.perform(patch("/accounts/"+ account1.getAccountId()+"/balance")
+                        .headers(httpHeaders)
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+        // assertEquals(newBalance, account1.getBalance());
+
     }
 
     @Test
-    void deleteAccount() {
+    void deleteAccount() throws Exception {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", encoderBase64(admin1.getUsername(), "123"));
+
+        MvcResult mvcResult = mockMvc.perform(delete("/accounts/" + account1.getAccountId())
+                        .headers(httpHeaders))
+                .andExpect(status().isNoContent())
+                .andReturn();
+        assertFalse(accountRepository.existsById(account1.getAccountId()));
     }
 }

@@ -9,6 +9,16 @@ public class TransferThirdPartyGetMoneyFromAHDTO {
     private Long idAccount;
     private String secretKey;
 
+    public TransferThirdPartyGetMoneyFromAHDTO() {
+    }
+
+    public TransferThirdPartyGetMoneyFromAHDTO(Money amountMoney, String namePrimaryOwner, Long idAccount, String secretKey) {
+        this.amountMoney = amountMoney;
+        this.namePrimaryOwner = namePrimaryOwner;
+        this.idAccount = idAccount;
+        this.secretKey = secretKey;
+    }
+
     public Money getAmountMoney() {
         return amountMoney;
     }

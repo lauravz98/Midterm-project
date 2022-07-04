@@ -8,6 +8,16 @@ public class TransferSendMoneyToAHFromThirdPartyDTO {
     private String nameReceiver;
     private String secretKey;
 
+    public TransferSendMoneyToAHFromThirdPartyDTO() {
+    }
+
+    public TransferSendMoneyToAHFromThirdPartyDTO(Money amountMoney, Long idAccount, String nameReceiver, String secretKey) {
+        this.amountMoney = amountMoney;
+        this.idAccount = idAccount;
+        this.nameReceiver = nameReceiver;
+        this.secretKey = secretKey;
+    }
+
     public String getSecretKey() {
         return secretKey;
     }

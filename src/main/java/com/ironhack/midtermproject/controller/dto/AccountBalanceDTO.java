@@ -15,6 +15,13 @@ public class AccountBalanceDTO {
     })
     private Money balance;
 
+    public AccountBalanceDTO(Money balance) {
+        this.balance = balance;
+    }
+
+    public AccountBalanceDTO() {
+    }
+
     public Money getBalance() {
         return balance;
     }
