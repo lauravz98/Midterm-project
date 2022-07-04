@@ -25,42 +25,45 @@ The system must have 3 types of Users: Admins and AccountHolders.
 * The AccountHolders access their own accounts when passing the correct credentials using Basic Auth. AccountHolders have a name, date of birth, a primaryAddress, an optional mailingAddress. 
 AccountHolders can access their own account balance and transfer money from any of their accounts to any other account. The transfer is only processed if the account has sufficient funds. The user must provide the Primary or Secondary owner name and the id of the account that should receive the transfer. Addionally, AccountHolders transfer money to ThirdParty users. AccountHolders methods are:
 ```java
-// Get
+    // Get methods
     Set<Account> findMyAccountsByAccountHolderId(CustomUserDetails userDetails);
     Account findMyAccountByAccountId(Long accountId, CustomUserDetails userDetails);
     Money findMyBalanceByAccountId(Long accountId, CustomUserDetails userDetails);
     List<Transfer> findMyTransfersReceiverByAccountId(Long accountId, CustomUserDetails userDetails);
-// Patch
+    
+    // Patch methods
     List<Transfer> findMyTransfersSenderByAccountId(Long accountId, CustomUserDetails userDetails);
-    void sendMoneyAccountHolder(Long accountId, CustomUserDetails userDetails, TransferSendMoneyToAccountHolderFromAHDTO transferSendMoneyToAccountHolderFromAHDTO);
-    void sendMoneyThirdParty(Long accountId, CustomUserDetails userDetails, TransferSendMoneyToThirdPartyFromAHDTO transferSendMoneyToThirdPartyFromAHDTO);
+    void sendMoneyAccountHolder(Long accountId, CustomUserDetails userDetails, TransferSendMoneyDTO transferSendMoneyDTO);
+    void sendMoneyThirdParty(Long accountId, CustomUserDetails userDetails, TransferSendMoneyDTO transferSendMoneyDTO);
  ```
 * Admins only have a name. Admins can access the balance for any account and to modify it. Admins methods are:
 ```java
-// Get
+    // Get methods
     List<Account> findAllAccounts();
     Account findAccountById(Long accountId);
     Money getBalanceByAccountId(Long accountId);
     List<Account> findByTypeAccount(TypeAccountEnum typeAccount);
     List<Transfer> findAllTransfer();
 
-    // Post
+    // Post methods
     Account createNewAccount(Checking checkingAccount);
     Account createNewAccount(Saving savingAccount);
     Account createNewAccount(CreditCardCreateDTO creditCard);
-
     ThirdParty createThirdParty(ThirdParty thirdParty);
 
-    // Patch
+    // Patch methods
     void updateBalanceByAccountId(Long accountId, AccountBalanceDTO accountBalanceDTO);
 
-    // Delete
+    // Delete methods
     void deleteAccount(Long accountId);
  ```
 * The ThirdParty Accounts have a hashed key and a name. Third-party users can receive and send money to other accounts. Third-party users can be added to the database by an admin. In order to receive and send money, Third-Party Users provide their hashed key in the header of the HTTP request. They also must provide the amount, the Account id and the account secret key.
 ```java
- List<Transfer> findTransfersReceiverByThirdId(Long thirdId, String hashKey);
+    // Get methods
+    List<Transfer> findTransfersReceiverByThirdId(Long thirdId, String hashKey);
     List<Transfer> findTransfersSenderByThirdId(Long thirdId, String hashKey);
+    
+     // Patch methods
     void sendMoneyAccountHolder(Long thirdId, String hashKey, TransferSendMoneyToAHFromThirdPartyDTO transferSendMoneyToAHFromThirdPartyDTO);
     void receiveMoneyAccountHolder(Long thirdId, String hashKey, TransferThirdPartyGetMoneyFromAHDTO transferThirdPartyGetMoneyFromAHDTO);
  ```
