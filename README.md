@@ -86,7 +86,7 @@ Additional fraud detection features are included. The application recognize patt
 * The necessary validations have also been included. And the postman collection is included with the requests made (working REST API), verifying that the response matches what is expected.
 
 
-### Diagrama de Clases
+### Class diagram
 
 The following is the class diagram of the project carried out
 https://app.diagrams.net/#G1jqVpWdKamQYIkgSQM4v7PJa6imnD4tlf
